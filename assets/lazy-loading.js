@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
             let videoSource = video.target.children[source];
 
             if (typeof videoSource.tagName === 'string' && videoSource.tagName === 'SOURCE') {
-              videoSource.src = videoSource.getAttribute('src');
+              videoSource.src = videoSource.getAttribute('data-src');
             }
           }
 

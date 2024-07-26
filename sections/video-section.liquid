@@ -1,10 +1,19 @@
 <div class="video-section">
   <p class="video-section__title">{{ section.settings.title }}</p>
   <div class="video-section__media">
-    {{
-      section.settings.video
-      | video_tag: width: 840, height: 460, autoplay: true, loop: true, muted: true, data-lazy-load: true
-    }}
+    <video
+      data-lazy-load
+      width="840"
+      height="460"
+      autoplay
+      muted
+      loop
+      poster="{{ section.settings.video.preview_image |  image_url  }}"
+    >
+      {% for source in section.settings.video.sources %}
+        <source data-src="{{ source.url }}" type="{{ source.mime_type }}">
+      {% endfor %}
+    </video>
   </div>
 </div>
 
