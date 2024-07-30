@@ -1,27 +1,26 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const lazyVideos = [].slice.call(document.querySelectorAll('[data-lazy-load]'));
+  const lazyVideos = Array.from(document.querySelectorAll('[data-lazy-load]'));
 
   if ('IntersectionObserver' in window) {
-    let lazyVideoObserver = new IntersectionObserver((entries) => {
-      entries.forEach(function (video) {
-        if (video.isIntersecting) {
-          for (let source in video.target.children) {
-            let videoSource = video.target.children[source];
+    const lazyVideoObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
 
-            if (typeof videoSource.tagName === 'string' && videoSource.tagName === 'SOURCE') {
-              videoSource.src = videoSource.getAttribute('data-src');
-            }
+        const video = entry.target;
+        Array.from(video.children).forEach((child) => {
+          if (child.tagName === 'SOURCE') {
+            child.src = child.getAttribute('data-src');
           }
+        });
 
-          video.target.load();
-          video.target.attributes.removeNamedItem('data-lazy-load');
-          lazyVideoObserver.unobserve(video.target);
-        }
+        video.load();
+        video.removeAttribute('data-lazy-load');
+        lazyVideoObserver.unobserve(video);
       });
     });
 
-    lazyVideos.forEach(function (lazyVideo) {
-      lazyVideoObserver.observe(lazyVideo);
+    lazyVideos.forEach((video) => {
+      lazyVideoObserver.observe(video);
     });
   }
 });
