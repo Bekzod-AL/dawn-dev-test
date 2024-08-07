@@ -47,6 +47,15 @@
         "show_text_below": false
       }
     },
+    "custom_liquid_deW6Ay": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<div class=\"klaviyo-form-U9vvZM\"><\/div>",
+        "color_scheme": "",
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    },
     "rich_text": {
       "type": "rich-text",
       "blocks": {
@@ -147,6 +156,7 @@
     "video_section": {
       "type": "video-section",
       "settings": {
+        "title": "Video section",
         "video": "shopify:\/\/files\/videos\/video_2024-07-24_17-31-03.mp4"
       }
     },
@@ -221,6 +231,7 @@
   },
   "order": [
     "image_banner",
+    "custom_liquid_deW6Ay",
     "rich_text",
     "featured_collection",
     "collage",

@@ -1,19 +1,21 @@
 <div class="video-section">
   <p class="video-section__title">{{ section.settings.title }}</p>
   <div class="video-section__media">
-    <video
-      data-lazy-load
-      width="840"
-      height="460"
-      autoplay
-      muted
-      loop
-      poster="{{ section.settings.video.preview_image |  image_url  }}"
-    >
-      {% for source in section.settings.video.sources %}
-        <source data-src="{{ source.url }}" type="{{ source.mime_type }}">
-      {% endfor %}
-    </video>
+    {% if section.settings.autoplay %}
+      <video
+        data-lazy-load
+        autoplay
+        muted
+        loop
+        poster="{{ section.settings.video.preview_image |  image_url  }}"
+      >
+        {% for source in section.settings.video.sources %}
+          <source data-src="{{ source.url }}" type="{{ source.mime_type }}">
+        {% endfor %}
+      </video>
+    {% else %}
+      {{ section.settings.video | video_tag: autoplay: false, controls: true, muted: false }}
+    {% endif %}
   </div>
 </div>
 
@@ -33,6 +35,11 @@
     display: flex;
     justify-content: center;
   }
+
+  .video-section video {
+    width: 860px;
+    height: 460px;
+  }
 </style>
 
 {% schema %}
@@ -42,13 +49,19 @@
     {
       "type": "text",
       "id": "title",
-      "label": "Video lazy load test",
+      "label": "Title",
       "default": "Video section"
     },
     {
       "type": "video",
       "id": "video",
       "label": "A shopify hosted video"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Video autoplay",
+      "default": false
     }
   ]
 }
