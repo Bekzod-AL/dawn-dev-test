@@ -24,3 +24,35 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+
+// web component
+
+class LazyVideoComponent extends HTMLElement {
+  connectedCallback() {
+    this.appendChild(document.createElement('video'));
+    this.update();
+  }
+
+  static get observedAttributes() {
+    return ['src'];
+  }
+
+  attributeChangedCallback() {
+    this.update();
+  }
+
+  update() {
+    const videoTag = this.querySelector('video');
+    const video = this.getAttribute('data-video-src');
+
+    console.log(video);
+
+    // if (videoTag && video) {
+    //   video.sources.forEach((source) => {
+    //     console.log(source);
+    //   });
+    // }
+  }
+}
+
+customElements.define('x-lazy-video', LazyVideoComponent);

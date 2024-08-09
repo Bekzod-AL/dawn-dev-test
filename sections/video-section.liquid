@@ -1,6 +1,13 @@
 <div class="video-section">
   <p class="video-section__title">{{ section.settings.title }}</p>
   <div class="video-section__media">
+    <x-lazy-video
+      data-video-src="{{ section.settings.video.sources[0].url }}"
+      data-video-type="{{ section.settings.video.sources[0].mime_type }}"
+      data-video-poster="{{ section.settings.video.preview_image |  image_url  }}"
+    >
+    </x-lazy-video>
+
     {% if section.settings.autoplay %}
       <video
         data-lazy-load
