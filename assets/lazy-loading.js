@@ -1,42 +1,3 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const collectLazyVideos = (root) => {
-    const lazyVideos = Array.from(root.querySelectorAll('[data-lazy-load]'));
-
-    root.querySelectorAll('*').forEach((el) => {
-      if (el.shadowRoot) {
-        lazyVideos.push(...collectLazyVideos(el.shadowRoot));
-      }
-    });
-
-    return lazyVideos;
-  };
-
-  const lazyVideos = collectLazyVideos(document);
-
-  if ('IntersectionObserver' in window) {
-    const lazyVideoObserver = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-
-        const video = entry.target;
-        Array.from(video.children).forEach((child) => {
-          if (child.tagName === 'SOURCE') {
-            child.src = child.getAttribute('data-src');
-          }
-        });
-
-        video.load();
-        video.removeAttribute('data-lazy-load');
-        lazyVideoObserver.unobserve(video);
-      });
-    });
-
-    lazyVideos.forEach((video) => {
-      lazyVideoObserver.observe(video);
-    });
-  }
-});
-
 // web component
 
 const videoElement = document.createElement('template');
@@ -53,7 +14,37 @@ class LazyVideoComponent extends HTMLElement {
       this.attachShadow({ mode: 'open' });
       this.shadowRoot.append(videoElement.content.cloneNode(true));
     }
+    this.observer = null;
     this.update();
+  }
+
+  connectedCallback() {
+    this.observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+
+        const video = this.shadowRoot.querySelector('video');
+
+        Array.from(video.children).forEach((child) => {
+          if (child.tagName === 'SOURCE') {
+            child.src = child.getAttribute('data-src');
+          }
+        });
+
+        video.load();
+        video.removeAttribute('data-lazy-load');
+
+        this.observer.unobserve(video);
+      });
+    });
+
+    this.observer.observe(this);
+  }
+
+  disconnectedCallback() {
+    if (this.observer) {
+      this.observer.disconnect();
+    }
   }
 
   update() {
