@@ -1,5 +1,17 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const lazyVideos = Array.from(document.querySelectorAll('[data-lazy-load]'));
+  const collectLazyVideos = (root) => {
+    const lazyVideos = Array.from(root.querySelectorAll('[data-lazy-load]'));
+
+    root.querySelectorAll('*').forEach((el) => {
+      if (el.shadowRoot) {
+        lazyVideos.push(...collectLazyVideos(el.shadowRoot));
+      }
+    });
+
+    return lazyVideos;
+  };
+
+  const lazyVideos = collectLazyVideos(document);
 
   if ('IntersectionObserver' in window) {
     const lazyVideoObserver = new IntersectionObserver((entries) => {
@@ -27,31 +39,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // web component
 
+const videoElement = document.createElement('template');
+videoElement.innerHTML = `
+  <video data-lazy-load autoplay loop  muted>
+    <source>
+  </video>
+`;
+
 class LazyVideoComponent extends HTMLElement {
-  connectedCallback() {
-    this.appendChild(document.createElement('video'));
-    this.update();
-  }
-
-  static get observedAttributes() {
-    return ['src'];
-  }
-
-  attributeChangedCallback() {
+  constructor() {
+    super();
+    if (!this.shadowRoot) {
+      this.attachShadow({ mode: 'open' });
+      this.shadowRoot.append(videoElement.content.cloneNode(true));
+    }
     this.update();
   }
 
   update() {
-    const videoTag = this.querySelector('video');
-    const video = this.getAttribute('data-video-src');
+    const videoTag = this.shadowRoot.querySelector('video');
+    const sourceTag = videoTag.querySelector('source');
+    const videoSrc = this.getAttribute('data-video-src');
+    const videoPoster = this.getAttribute('data-video-poster');
+    const videoType = this.getAttribute('data-video-type');
 
-    console.log(video);
-
-    // if (videoTag && video) {
-    //   video.sources.forEach((source) => {
-    //     console.log(source);
-    //   });
-    // }
+    videoTag.setAttribute('poster', videoPoster);
+    sourceTag.setAttribute('data-src', videoSrc);
+    sourceTag.setAttribute('type', videoType);
   }
 }
 
