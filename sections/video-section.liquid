@@ -2,9 +2,28 @@
   <p class="video-section__title">{{ section.settings.title }}</p>
   <div class="video-section__media">
     {% if section.settings.autoplay %}
+      {% assign video_sources_json = '' %}
+      {% for source in section.settings.video.sources %}
+        {% assign source_url = source.url | escape %}
+        {% assign source_mime_type = source.mime_type | escape %}
+
+        {% assign source_json = '{"url": "'
+          | append: source_url
+          | append: '", "mime_type": "'
+          | append: source_mime_type
+          | append: '"}'
+        %}
+
+        {% if forloop.first %}
+          {% assign video_sources_json = source_json %}
+        {% else %}
+          {% assign video_sources_json = video_sources_json | append: ',' | append: source_json %}
+        {% endif %}
+      {% endfor %}
+      {% assign video_sources_json = '[' | append: video_sources_json | append: ']' %}
+
       <x-lazy-video
-        data-video-src="{{ section.settings.video.sources[0].url }}"
-        data-video-type="{{ section.settings.video.sources[0].mime_type }}"
+        data-video-sources="{{ video_sources_json |  escape }}"
         data-video-poster="{{ section.settings.video.preview_image |  image_url  }}"
       >
       </x-lazy-video>

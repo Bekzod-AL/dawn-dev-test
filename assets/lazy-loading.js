@@ -5,17 +5,15 @@ class LazyVideoComponent extends HTMLElement {
     super();
 
     this.videoElement = document.createElement('template');
-    this.videoElement.innerHTML = `
-      <video data-lazy-load autoplay loop muted>
-        <source>
-      </video>
-    `;
+    this.videoElement.innerHTML = `<video data-lazy-load autoplay loop muted></video>`;
+
     this.videoAttribute = 'data-lazy-load';
 
     if (!this.shadowRoot) {
       this.attachShadow({ mode: 'open' });
       this.shadowRoot.append(this.videoElement.content.cloneNode(true));
     }
+
     this.observer = null;
     this.update();
   }
@@ -74,14 +72,18 @@ class LazyVideoComponent extends HTMLElement {
 
   update() {
     const videoTag = this.shadowRoot.querySelector('video');
-    const sourceTag = videoTag.querySelector('source');
-    const videoSrc = this.getAttribute('data-video-src');
+    const videoSources = JSON.parse(this.getAttribute('data-video-sources'));
     const videoPoster = this.getAttribute('data-video-poster');
-    const videoType = this.getAttribute('data-video-type');
 
-    videoTag.setAttribute('poster', videoPoster);
-    sourceTag.setAttribute('data-src', videoSrc);
-    sourceTag.setAttribute('type', videoType);
+    videoSources.forEach((source) => {
+      let sourceTag = document.createElement('source');
+
+      sourceTag.setAttribute('data-src', source.url);
+      sourceTag.setAttribute('type', source.mime_type);
+      sourceTag.setAttribute('poster', videoPoster);
+
+      videoTag.append(sourceTag);
+    });
   }
 }
 
