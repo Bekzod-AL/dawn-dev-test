@@ -157,7 +157,8 @@
       "type": "video-section",
       "settings": {
         "title": "Video section",
-        "video": "shopify:\/\/files\/videos\/video_2024-07-24_17-31-03.mp4"
+        "video": "shopify:\/\/files\/videos\/video_2024-07-24_17-31-03.mp4",
+        "autoplay": true
       }
     },
     "video": {
