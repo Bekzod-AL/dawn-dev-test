@@ -80,7 +80,7 @@ class LazyVideoComponent extends HTMLElement {
 
       sourceTag.setAttribute('data-src', source.url);
       sourceTag.setAttribute('type', source.mime_type);
-      sourceTag.setAttribute('poster', videoPoster);
+      videoTag.setAttribute('poster', videoPoster);
 
       videoTag.append(sourceTag);
     });
