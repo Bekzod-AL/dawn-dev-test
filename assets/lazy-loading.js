@@ -5,7 +5,7 @@ class LazyVideoComponent extends HTMLElement {
     super();
 
     this.videoElement = document.createElement('template');
-    this.videoElement.innerHTML = `<video data-lazy-load></video>`;
+    this.videoElement.innerHTML = `<video data-lazy-load muted autoplay></video>`;
 
     this.videoAttribute = 'data-lazy-load';
 
@@ -96,8 +96,6 @@ class LazyVideoComponent extends HTMLElement {
       const value = this.getAttribute(attribute);
       videoTag.setAttribute(attribute, value);
     });
-
-    // videoTag.muted = true;
   }
 }
 
