@@ -5,7 +5,7 @@ class LazyVideoComponent extends HTMLElement {
     super();
 
     this.videoElement = document.createElement('template');
-    this.videoElement.innerHTML = `<video data-lazy-load autoplay loop muted></video>`;
+    this.videoElement.innerHTML = `<video data-lazy-load></video>`;
 
     this.videoAttribute = 'data-lazy-load';
 
@@ -47,14 +47,12 @@ class LazyVideoComponent extends HTMLElement {
       this.loadVideo(video);
       this.observer.unobserve(video);
     } else {
-      console.log(`Resuming video at ${video.currentTime.toFixed(2)}s / ${video.duration.toFixed(2)}s`);
       video.play();
     }
   }
 
   handleVideoOutOfView(video) {
     if (!video.hasAttribute(this.videoAttribute)) {
-      console.log(`Video paused at ${video.currentTime.toFixed(2)}s / ${video.duration.toFixed(2)}s`);
       video.pause();
     }
   }
@@ -84,6 +82,22 @@ class LazyVideoComponent extends HTMLElement {
 
       videoTag.append(sourceTag);
     });
+
+    this.addVideoAttributes();
+  }
+
+  addVideoAttributes() {
+    const videoTag = this.shadowRoot.querySelector('video');
+    const allAtributes = this.getAttributeNames();
+
+    allAtributes.forEach((attribute) => {
+      if (attribute.startsWith('data-')) return;
+
+      const value = this.getAttribute(attribute);
+      videoTag.setAttribute(attribute, value);
+    });
+
+    // videoTag.muted = true;
   }
 }
 
