@@ -1,26 +1,7 @@
 <div class="video-section">
   <p class="video-section__title">{{ section.settings.title }}</p>
   <div class="video-section__media">
-    {% render 'lazy-video-snippet',
-      video: section.settings.video,
-      video_autoplay: section.settings.autoplay,
-      width: '860',
-      height: '440'
-    %}
-
-    {% comment %}
-      second variant
-      {% if section.settings.autoplay %}
-        {% render 'lazy-video-snippet',
-          video: section.settings.video,
-          video_autoplay: section.settings.autoplay,
-          width: '860',
-          height: '440'
-        %}
-      {% else %}
-        {{ section.settings.video | video_tag: autoplay: false, controls: true, muted: false }}
-      {% endif %}
-    {% endcomment %}
+    {% render 'video-render', video: section.settings.video, autoplay: section.settings.autoplay, class: 'my-video' %}
   </div>
 </div>
 
@@ -39,6 +20,10 @@
   .video-section__media {
     display: flex;
     justify-content: center;
+  }
+
+  .my-video {
+    width: 100px;
   }
 </style>
 

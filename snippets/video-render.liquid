@@ -1,0 +1,51 @@
+{% comment %}
+  {% render 'video-render',
+    video: section.settings.video,
+    poster: url,
+    autoplay: true,
+    controls: false,
+    loop: true,
+    width: 800,
+    height: 600
+  %}
+{% endcomment %}
+
+{% liquid
+  assign autoplay = autoplay | default: false
+  assign width = width | default: 1920
+  assign height = height | default: 1080
+  assign poster = poster | default: video.preview_image
+  assign controls = controls | default: false
+  assign muted = muted | default: false
+  assign loop = loop | default: false
+  assign class = class | default: ''
+%}
+
+{% unless video == null %}
+  {% if autoplay %}
+    <script src="{{ 'lazy-video.js' |  asset_url }}" defer="defer"></script>
+
+    {% capture video_sources_value %}
+      [
+        {% for source in video.sources %}
+          {
+            "url": "{{ source.url }}",
+            "mime_type": "{{ source.mime_type }}"
+          }
+        {% endfor %}
+      ]
+    {% endcapture %}
+
+    <lazy-video
+      class="{{ class }}"
+      width="{{ width }}"
+      height="{{ height }}"
+      loop="{{ loop }}"
+      poster="{{ poster |  image_url  }}"
+      sources="{{ video_sources_value |  escape }}"
+    >
+    </lazy-video>
+  {% else %}
+    {{ video | video_tag: class: class, autoplay: false, controls: controls, muted: muted, loop: loop }}
+  {% endif %}
+{% endunless %}
