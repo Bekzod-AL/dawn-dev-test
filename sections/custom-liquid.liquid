@@ -15,6 +15,12 @@
   <div class="section-{{ section.id }}-padding">
     {{ section.settings.custom_liquid }}
   </div>
+  {% render 'lazy-video-snippet',
+    video: section.settings.video,
+    video_autoplay: section.settings.autoplay,
+    width: '860',
+    height: '440'
+  %}
 </div>
 
 {% schema %}
@@ -23,6 +29,17 @@
   "tag": "section",
   "class": "section",
   "settings": [
+    {
+      "type": "video",
+      "id": "video",
+      "label": "A shopify hosted video"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Video autoplay",
+      "default": false
+    },
     {
       "type": "liquid",
       "id": "custom_liquid",

@@ -1,0 +1,29 @@
+<script src="{{ 'lazy-video.js' |  asset_url }}" defer="defer"></script>
+
+{% capture video_sources_value %}
+  [
+    {% for source in video.sources %}
+      {
+        "url": "{{ source.url }}",
+        "mime_type": "{{ source.mime_type }}"
+      }
+    {% endfor %}
+  ]
+{% endcapture %}
+
+{% if video_autoplay %}
+  <lazy-video
+    {% if width %}
+      width="{{ width }}"
+    {% endif %}
+    {% if height %}
+      height="{{ height }}"
+    {% endif %}
+    loop
+    poster="{{ video.preview_image |  image_url  }}"
+    sources="{{ video_sources_value |  escape }}"
+  >
+  </lazy-video>
+{% else %}
+  {{ video | video_tag: autoplay: false, controls: true, muted: false }}
+{% endif %}

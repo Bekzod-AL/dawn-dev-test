@@ -1,29 +1,26 @@
-{% capture video_sources_value %}
-  [
-    {% for source in section.settings.video.sources %}
-      {
-        "url": "{{ source.url }}",
-        "mime_type": "{{ source.mime_type }}"
-      }
-    {% endfor %}
-  ]
-{% endcapture %}
-
 <div class="video-section">
   <p class="video-section__title">{{ section.settings.title }}</p>
   <div class="video-section__media">
-    {% if section.settings.autoplay %}
-      <lazy-video
-        width="860"
-        height="440"
-        loop
-        sources="{{ video_sources_value |  escape }}"
-        poster="{{ section.settings.video.preview_image |  image_url  }}"
-      >
-      </lazy-video>
-    {% else %}
-      {{ section.settings.video | video_tag: autoplay: false, controls: true, muted: false }}
-    {% endif %}
+    {% render 'lazy-video-snippet',
+      video: section.settings.video,
+      video_autoplay: section.settings.autoplay,
+      width: '860',
+      height: '440'
+    %}
+
+    {% comment %}
+      second variant
+      {% if section.settings.autoplay %}
+        {% render 'lazy-video-snippet',
+          video: section.settings.video,
+          video_autoplay: section.settings.autoplay,
+          width: '860',
+          height: '440'
+        %}
+      {% else %}
+        {{ section.settings.video | video_tag: autoplay: false, controls: true, muted: false }}
+      {% endif %}
+    {% endcomment %}
   </div>
 </div>
 
