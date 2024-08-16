@@ -12,16 +12,15 @@
 <div class="video-section">
   <p class="video-section__title">{{ section.settings.title }}</p>
   <div class="video-section__media">
-    {% comment %} should be snippet {% endcomment %}
     {% if section.settings.autoplay %}
-      <x-lazy-video
+      <lazy-video
         width="860"
         height="440"
         loop
-        data-video-sources="{{ video_sources_value |  escape }}"
-        data-video-poster="{{ section.settings.video.preview_image |  image_url  }}"
+        sources="{{ video_sources_value |  escape }}"
+        poster="{{ section.settings.video.preview_image |  image_url  }}"
       >
-      </x-lazy-video>
+      </lazy-video>
     {% else %}
       {{ section.settings.video | video_tag: autoplay: false, controls: true, muted: false }}
     {% endif %}

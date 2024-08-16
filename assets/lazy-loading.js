@@ -5,9 +5,9 @@ class LazyVideoComponent extends HTMLElement {
     super();
 
     this.videoElement = document.createElement('template');
-    this.videoElement.innerHTML = `<video data-lazy-load muted autoplay></video>`;
+    this.videoElement.innerHTML = `<video muted autoplay></video>`;
 
-    this.videoAttribute = 'data-lazy-load';
+    this._isLoaded = false;
 
     if (!this.shadowRoot) {
       this.attachShadow({ mode: 'open' });
@@ -24,6 +24,14 @@ class LazyVideoComponent extends HTMLElement {
 
   disconnectedCallback() {
     this.observer?.disconnect();
+  }
+
+  get isLoaded() {
+    return this._isLoaded;
+  }
+
+  set isLoaded(value) {
+    this._isLoaded = value;
   }
 
   setObserver() {
@@ -43,7 +51,7 @@ class LazyVideoComponent extends HTMLElement {
   }
 
   handleVideoInView(video) {
-    if (video.hasAttribute(this.videoAttribute)) {
+    if (!this.isLoaded) {
       this.loadVideo(video);
       this.observer.unobserve(video);
     } else {
@@ -52,7 +60,7 @@ class LazyVideoComponent extends HTMLElement {
   }
 
   handleVideoOutOfView(video) {
-    if (!video.hasAttribute(this.videoAttribute)) {
+    if (this.isLoaded) {
       video.pause();
     }
   }
@@ -65,33 +73,30 @@ class LazyVideoComponent extends HTMLElement {
     });
 
     video.load();
-    video.removeAttribute(this.videoAttribute);
+    this.isLoaded = true;
   }
 
   update() {
     const videoTag = this.shadowRoot.querySelector('video');
-    const videoSources = JSON.parse(this.getAttribute('data-video-sources'));
-    const videoPoster = this.getAttribute('data-video-poster');
+    const videoSources = JSON.parse(this.getAttribute('sources'));
 
     videoSources.forEach((source) => {
       let sourceTag = document.createElement('source');
 
       sourceTag.setAttribute('data-src', source.url);
       sourceTag.setAttribute('type', source.mime_type);
-      videoTag.setAttribute('poster', videoPoster);
 
       videoTag.append(sourceTag);
     });
 
-    this.addVideoAttributes();
+    this.addVideoAttributes(videoTag);
   }
 
-  addVideoAttributes() {
-    const videoTag = this.shadowRoot.querySelector('video');
+  addVideoAttributes(videoTag) {
     const allAtributes = this.getAttributeNames();
 
     allAtributes.forEach((attribute) => {
-      if (attribute.startsWith('data-')) return;
+      if (attribute === 'sources'.toLowerCase()) return;
 
       const value = this.getAttribute(attribute);
       videoTag.setAttribute(attribute, value);
@@ -99,4 +104,4 @@ class LazyVideoComponent extends HTMLElement {
   }
 }
 
-customElements.define('x-lazy-video', LazyVideoComponent);
+customElements.define('lazy-video', LazyVideoComponent);
