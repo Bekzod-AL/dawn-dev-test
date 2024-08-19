@@ -26,7 +26,6 @@
 
 {% unless video == null %}
   {% if autoplay %}
-    {{ 'video-render.css' | asset_url | stylesheet_tag }}
     <script type="module" src="{{ 'lazy-video.js' |  asset_url }}" defer="defer"></script>
 
     {% capture video_sources_value %}

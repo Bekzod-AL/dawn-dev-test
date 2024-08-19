@@ -6,11 +6,8 @@ class LazyVideoComponent extends HTMLElement {
 
     this.videoElement = document.createElement('template');
     this.videoElement.innerHTML = `
-      <link rel="stylesheet" href="${new URL('video-render.css', import.meta.url)}?v${Date.now()}">
-      <video muted autoplay></video>
+      <video muted autoplay></video>  
     `;
-
-    // this.isFileExists('video-render.css');
 
     this._isLoaded = false;
 
@@ -115,20 +112,6 @@ class LazyVideoComponent extends HTMLElement {
     attributes.forEach((attribute) => {
       this.removeAttribute(attribute);
     });
-  }
-
-  async isFileExists(fileName) {
-    try {
-      const response = await fetch(`${new URL(fileName, import.meta.url)}`);
-
-      if (response.ok) {
-        console.log('ok');
-      } else {
-        console.warn(`Stylesheet "${fileName}" not found.`);
-      }
-    } catch (error) {
-      console.log('Error loading file:', error);
-    }
   }
 }
 
