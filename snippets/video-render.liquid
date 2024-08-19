@@ -1,4 +1,7 @@
 {% comment %}
+  Required attribute is 'video' and if 'autoplay' is true - the lazy loading video will be rendered.
+  An example of code to render snippet file (also all parameters that the video tag has can be applied through arguments).
+
   {% render 'video-render',
     video: section.settings.video,
     poster: url,
@@ -23,7 +26,8 @@
 
 {% unless video == null %}
   {% if autoplay %}
-    <script src="{{ 'lazy-video.js' |  asset_url }}" defer="defer"></script>
+    {{ 'video-render.css' | asset_url | stylesheet_tag }}
+    <script type="module" src="{{ 'lazy-video.js' |  asset_url }}" defer="defer"></script>
 
     {% capture video_sources_value %}
       [
