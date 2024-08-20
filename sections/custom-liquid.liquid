@@ -10,17 +10,32 @@
       padding-bottom: {{ section.settings.padding_bottom }}px;
     }
   }
+
+  .video-container {
+    display: flex;
+    justify-content: center;
+  }
+
+  .main-video {
+    width: 800px;
+    height: auto;
+  }
 {%- endstyle -%}
 <div class="color-{{ section.settings.color_scheme }} gradient">
   <div class="section-{{ section.id }}-padding">
     {{ section.settings.custom_liquid }}
   </div>
-  {% render 'video-render',
-    video: section.settings.video,
-    video_autoplay: section.settings.autoplay,
-    width: '860',
-    height: '440'
-  %}
+
+  <div class="video-container">
+    {% render 'video-render',
+      video: section.settings.video,
+      video_autoplay: section.settings.autoplay,
+      width: '860',
+      height: '440',
+      controls: true,
+      class: 'main-video'
+    %}
+  </div>
 </div>
 
 {% schema %}

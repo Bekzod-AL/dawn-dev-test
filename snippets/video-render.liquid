@@ -10,13 +10,14 @@
     loop: true,
     width: 800,
     height: 600
+    class: "my-video"
   %}
 {% endcomment %}
 
 {% liquid
   assign autoplay = autoplay | default: false
-  assign width = width | default: 1920
-  assign height = height | default: 1080
+  assign width = width | default: 800
+  assign height = height | default: 600
   assign poster = poster | default: video.preview_image
   assign controls = controls | default: false
   assign muted = muted | default: false

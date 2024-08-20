@@ -4,18 +4,36 @@ class LazyVideoComponent extends HTMLElement {
   constructor() {
     super();
 
+    const width = this.getAttribute('width');
+    const height = this.getAttribute('height');
+
+    const widthValue = this.getDimensionValue(width);
+    const aspectRatio = this.getAspectRatio(width, height);
+
     this.videoElement = document.createElement('template');
     this.videoElement.innerHTML = `
+      <style>
+        video {
+          max-width: 100%;
+          aspect-ratio: ${aspectRatio};
+        }
+
+        @media(max-width: ${widthValue}) {
+          video {
+            height: auto;
+          }
+        }
+      </style>
+      
       <video muted autoplay></video>  
     `;
-
-    this._isLoaded = false;
 
     if (!this.shadowRoot) {
       this.attachShadow({ mode: 'open' });
       this.shadowRoot.append(this.videoElement.content.cloneNode(true));
     }
 
+    this._isLoaded = false;
     this.observer = null;
     this.update();
   }
@@ -99,19 +117,39 @@ class LazyVideoComponent extends HTMLElement {
     const allAtributes = this.getAttributeNames();
 
     allAtributes.forEach((attribute) => {
-      if (attribute === 'sources'.toLowerCase()) return;
-
       const value = this.getAttribute(attribute);
       videoTag.setAttribute(attribute, value);
+    });
+
+    this.removeVideoAttributes();
+  }
+
+  removeVideoAttributes() {
+    const attributes = ['class', 'sources'];
+
+    attributes.forEach((attribute) => {
+      this.shadowRoot.querySelector('video').removeAttribute(attribute);
     });
   }
 
   removeComponentAttributes() {
-    const attributes = ['width', 'height', 'class'];
+    const attributes = ['width', 'height'];
 
     attributes.forEach((attribute) => {
       this.removeAttribute(attribute);
     });
+  }
+
+  getDimensionValue(dimension) {
+    if (dimension === 'auto') return 'auto';
+
+    return `${parseInt(dimension)}px`;
+  }
+
+  getAspectRatio(width, height) {
+    if (width === 'auto' || height === 'auto') return 'auto';
+
+    return parseInt(width) / parseInt(height);
   }
 }
 
