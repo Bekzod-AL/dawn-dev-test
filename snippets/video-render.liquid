@@ -1,6 +1,7 @@
 {% comment %}
   Required attribute is 'video' and if 'autoplay' is true - the lazy loading video will be rendered.
-  An example of code to render snippet file (also all parameters that the video tag has can be applied through arguments).
+
+  An example of the code to render snippet file:
 
   {% render 'video-render',
     video: section.settings.video,
@@ -11,18 +12,27 @@
     width: 800,
     height: 600
     class: "my-video"
+    part: "lazy-video"
   %}
+
+  Reffering to the 'part' attribute , you can style your video using it:
+
+  // .css
+  lazy-video::part(video) {
+    background-color: tomato;
+  }
 {% endcomment %}
 
 {% liquid
   assign autoplay = autoplay | default: false
-  assign width = width | default: 800
-  assign height = height | default: 600
+  assign width = width | default: 1920
+  assign height = height | default: 1080
   assign poster = poster | default: video.preview_image
   assign controls = controls | default: false
   assign muted = muted | default: false
   assign loop = loop | default: false
   assign class = class | default: ''
+  assign part = part | default: ''
 %}
 
 {% unless video == null %}
@@ -42,6 +52,7 @@
 
     <lazy-video
       class="{{ class }}"
+      part="{{ part }}"
       width="{{ width }}"
       height="{{ height }}"
       loop="{{ loop }}"

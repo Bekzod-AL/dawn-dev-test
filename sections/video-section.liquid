@@ -1,7 +1,12 @@
 <div class="video-section">
   <p class="video-section__title">{{ section.settings.title }}</p>
   <div class="video-section__media">
-    {% render 'video-render', video: section.settings.video, autoplay: section.settings.autoplay, class: 'my-video' %}
+    {% render 'video-render',
+      video: section.settings.video,
+      autoplay: section.settings.autoplay,
+      class: 'my-video',
+      part: 'lazy-video'
+    %}
   </div>
 </div>
 

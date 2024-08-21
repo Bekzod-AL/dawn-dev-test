@@ -7,7 +7,6 @@ class LazyVideoComponent extends HTMLElement {
     const width = this.getAttribute('width');
     const height = this.getAttribute('height');
 
-    const widthValue = this.getDimensionValue(width);
     const aspectRatio = this.getAspectRatio(width, height);
 
     this.videoElement = document.createElement('template');
@@ -16,12 +15,6 @@ class LazyVideoComponent extends HTMLElement {
         video {
           max-width: 100%;
           aspect-ratio: ${aspectRatio};
-        }
-
-        @media(max-width: ${widthValue}) {
-          video {
-            height: auto;
-          }
         }
       </style>
       
@@ -125,7 +118,7 @@ class LazyVideoComponent extends HTMLElement {
   }
 
   removeVideoAttributes() {
-    const attributes = ['class', 'sources'];
+    const attributes = ['class', 'sources', 'width', 'height'];
 
     attributes.forEach((attribute) => {
       this.shadowRoot.querySelector('video').removeAttribute(attribute);
@@ -133,17 +126,11 @@ class LazyVideoComponent extends HTMLElement {
   }
 
   removeComponentAttributes() {
-    const attributes = ['width', 'height'];
+    const attributes = ['width', 'height', 'part'];
 
     attributes.forEach((attribute) => {
       this.removeAttribute(attribute);
     });
-  }
-
-  getDimensionValue(dimension) {
-    if (dimension === 'auto') return 'auto';
-
-    return `${parseInt(dimension)}px`;
   }
 
   getAspectRatio(width, height) {
