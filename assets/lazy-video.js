@@ -6,7 +6,6 @@ class LazyVideoComponent extends HTMLElement {
 
     const width = this.getAttribute('width');
     const height = this.getAttribute('height');
-    const fullWidth = this.getAttribute('fullwidth');
 
     const aspectRatio = this.getAspectRatio(width, height);
 
