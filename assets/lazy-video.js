@@ -6,6 +6,7 @@ class LazyVideoComponent extends HTMLElement {
 
     const width = this.getAttribute('width');
     const height = this.getAttribute('height');
+    const fullWidth = this.getAttribute('fullwidth');
 
     const aspectRatio = this.getAspectRatio(width, height);
 
@@ -104,6 +105,8 @@ class LazyVideoComponent extends HTMLElement {
 
     this.addVideoAttributes(videoTag);
     this.removeComponentAttributes();
+
+    if (videoTag.getAttribute('fullwidth')) this.setFullWidth(videoTag);
   }
 
   addVideoAttributes(videoTag) {
@@ -126,7 +129,7 @@ class LazyVideoComponent extends HTMLElement {
   }
 
   removeComponentAttributes() {
-    const attributes = ['width', 'height', 'part'];
+    const attributes = ['width', 'height', 'part', 'fullwidth', 'loop'];
 
     attributes.forEach((attribute) => {
       this.removeAttribute(attribute);
@@ -137,6 +140,10 @@ class LazyVideoComponent extends HTMLElement {
     if (width === 'auto' || height === 'auto') return 'auto';
 
     return parseInt(width) / parseInt(height);
+  }
+
+  setFullWidth(video) {
+    video.style.width = '100%';
   }
 }
 

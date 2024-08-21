@@ -9,22 +9,25 @@
     autoplay: true,
     controls: false,
     loop: true,
+    full_width: false,
     width: 800,
-    height: 600
-    class: "my-video"
-    part: "lazy-video"
+    height: 600,
+    class: "my-video",
+    part: "video"
   %}
 
-  Reffering to the 'part' attribute , you can style your video using it:
+  Reffering to the 'part' attribute that allows you to style it from any css file:
 
   // .css
   lazy-video::part(video) {
-    background-color: tomato;
+    width: 720px;
+    object-fit: cover;
   }
 {% endcomment %}
 
 {% liquid
   assign autoplay = autoplay | default: false
+  assign full_width = full_width | default: false
   assign width = width | default: 1920
   assign height = height | default: 1080
   assign poster = poster | default: video.preview_image
@@ -53,6 +56,7 @@
     <lazy-video
       class="{{ class }}"
       part="{{ part }}"
+      fullWidth="{{ full_width }}"
       width="{{ width }}"
       height="{{ height }}"
       loop="{{ loop }}"
@@ -61,6 +65,16 @@
     >
     </lazy-video>
   {% else %}
-    {{ video | video_tag: class: class, autoplay: false, controls: controls, muted: muted, loop: loop }}
+    {{
+      video
+      | video_tag:
+        class: class,
+        autoplay: false,
+        controls: controls,
+        muted: muted,
+        loop: loop,
+        width: width,
+        height: height
+    }}
   {% endif %}
 {% endunless %}
