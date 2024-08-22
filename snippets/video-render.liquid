@@ -19,10 +19,10 @@
   Reffering to the 'part' attribute that allows you to style it from any css file:
 
   // example.css
-  lazy-video::part(video) {
-    width: 720px;
-    object-fit: cover;
-  }
+  lazy-video::part(video) {}
+
+  .my-class,
+  .my-class::part(video) {}
 {% endcomment %}
 
 {% liquid
