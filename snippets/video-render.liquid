@@ -1,4 +1,6 @@
 {% comment %}
+  Before you start using this snippet file make sure to upload 'components/video-render.js' file in your assets folder!
+
   Required attribute is 'video' and if 'autoplay' is true - the lazy loading video will be rendered.
 
   An example of the code to render snippet file:
@@ -40,7 +42,7 @@
 
 {% unless video == null %}
   {% if autoplay %}
-    <script type="module" src="{{ 'lazy-video.js' |  asset_url }}" defer="defer"></script>
+    <script type="module" src="{{ 'video-render.js' |  asset_url }}" defer="defer"></script>
 
     {% capture video_sources_value %}
       [
