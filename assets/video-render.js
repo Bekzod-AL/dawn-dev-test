@@ -120,7 +120,7 @@ class LazyVideoComponent extends HTMLElement {
   }
 
   removeComponentAttributes() {
-    const attributes = ['width', 'height', 'part', 'fullwidth', 'loop'];
+    const attributes = ['width', 'height', 'part'];
 
     attributes.forEach((attribute) => {
       this.removeAttribute(attribute);
