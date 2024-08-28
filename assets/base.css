@@ -635,19 +635,6 @@ h3 .icon-arrow,
   transform: translateX(-0.05rem);
 }
 
-.svg-wrapper {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  width: 20px;
-  height: 20px;
-}
-
-.svg-wrapper > svg {
-  height: 100%;
-  width: 100%;
-}
-
 /* base-details-summary */
 summary {
   cursor: pointer;
@@ -699,11 +686,6 @@ summary::-webkit-details-marker {
   .facets .disclosure-has-popup[open] > summary + * {
     z-index: 2;
   }
-}
-
-.placeholder-svg {
-  height: 100%;
-  width: 100%;
 }
 
 /* base-focus */
@@ -842,7 +824,7 @@ summary::-webkit-details-marker {
   align-items: center;
 }
 
-.title-wrapper-with-link .link-with-icon .svg-wrapper {
+.title-wrapper-with-link .link-with-icon svg {
   width: 1.5rem;
 }
 
@@ -1483,7 +1465,7 @@ details[open] > .share-button__fallback {
   color: rgba(var(--color-foreground), 0.75);
 }
 
-.share-button__fallback button:hover .svg-wrapper {
+.share-button__fallback button:hover svg {
   transform: scale(1.07);
 }
 
@@ -1681,14 +1663,13 @@ details[open] > .share-button__fallback {
 
 /* Select */
 
-.select .svg-wrapper,
-.customer select + .svg-wrapper {
+.select .icon-caret,
+.customer select + svg {
   height: 0.6rem;
-  width: 1rem;
   pointer-events: none;
   position: absolute;
   top: calc(50% - 0.2rem);
-  right: 0;
+  right: calc(var(--inputs-border-width) + 1.5rem);
 }
 
 .select__select,
@@ -1789,7 +1770,7 @@ details[open] > .share-button__fallback {
   width: 4.4rem;
 }
 
-.field__button > .svg-wrapper {
+.field__button > svg {
   height: 2.5rem;
   width: 2.5rem;
 }
@@ -1841,7 +1822,7 @@ input[type='checkbox'] {
 }
 
 .form__message .icon,
-.customer .form__message .svg-wrapper {
+.customer .form__message svg {
   flex-shrink: 0;
   height: 1.3rem;
   margin-right: 0.5rem;
@@ -1849,13 +1830,13 @@ input[type='checkbox'] {
 }
 
 .form__message--large .icon,
-.customer .form__message .svg-wrapper {
+.customer .form__message svg {
   height: 1.5rem;
   width: 1.5rem;
   margin-right: 1rem;
 }
 
-.customer .field .form__message .svg-wrapper {
+.customer .field .form__message svg {
   align-self: start;
 }
 
@@ -1957,7 +1938,7 @@ input[type='checkbox'] {
   margin-right: calc(var(--inputs-border-width));
 }
 
-.quantity__button .svg-wrapper {
+.quantity__button svg {
   width: 1rem;
   pointer-events: none;
 }
@@ -2535,11 +2516,6 @@ input[type='checkbox'] {
   height: 100%;
 }
 
-.header__icon .svg-wrapper {
-  width: 44px;
-  height: 44px;
-}
-
 .header__icon::after {
   content: none;
 }
@@ -2581,14 +2557,6 @@ input[type='checkbox'] {
 
 .header__icon--account shop-user-avatar {
   --shop-avatar-size: 2.8rem;
-}
-
-details .header__icon-close {
-  display: none;
-}
-
-details[open] .header__icon-close {
-  display: inline-block;
 }
 
 account-icon {
@@ -3255,7 +3223,7 @@ details-disclosure > details {
 }
 
 .animate--zoom-in > img,
-.animate--zoom-in > .svg-wrapper {
+.animate--zoom-in > svg {
   transition: scale var(--duration-short) linear;
   scale: var(--zoom-in-ratio);
 }
@@ -3264,7 +3232,7 @@ details-disclosure > details {
 
 @media (prefers-reduced-motion: no-preference) {
   .animate--ambient > img,
-  .animate--ambient > .svg-wrapper {
+  .animate--ambient > svg {
     animation: animateAmbient 30s linear infinite;
   }
 

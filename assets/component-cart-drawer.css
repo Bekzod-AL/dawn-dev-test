@@ -99,7 +99,7 @@ cart-drawer:not(.is-empty) .cart-drawer__collection {
   right: 5px;
 }
 
-.drawer__close .svg-wrapper {
+.drawer__close svg {
   height: 2rem;
   width: 2rem;
 }

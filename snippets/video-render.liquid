@@ -38,6 +38,7 @@
   assign loop = loop | default: false
   assign class = class | default: ''
   assign part = part | default: ''
+  assign image_size_value = width | remove: 'px' | append: 'x'
 %}
 
 {% unless video == null %}
@@ -70,6 +71,7 @@
     {{
       video
       | video_tag:
+        image_size: image_size_value,
         class: class,
         autoplay: false,
         controls: controls,

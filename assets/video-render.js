@@ -28,7 +28,7 @@ class LazyVideoComponent extends HTMLElement {
 
     this._isLoaded = false;
     this.observer = null;
-    this.update();
+    this.createVideoSources();
   }
 
   connectedCallback() {
@@ -89,7 +89,7 @@ class LazyVideoComponent extends HTMLElement {
     this.isLoaded = true;
   }
 
-  update() {
+  createVideoSources() {
     const videoTag = this.shadowRoot.querySelector('video');
     const videoSources = JSON.parse(this.getAttribute('sources'));
 
@@ -105,7 +105,7 @@ class LazyVideoComponent extends HTMLElement {
     this.addVideoAttributes(videoTag);
     this.removeComponentAttributes();
 
-    if (videoTag.getAttribute('fullwidth')) this.setFullWidth(videoTag);
+    if (JSON.parse(videoTag.getAttribute('fullwidth'))) this.setFullWidth(videoTag);
   }
 
   addVideoAttributes(videoTag) {
@@ -120,7 +120,7 @@ class LazyVideoComponent extends HTMLElement {
   }
 
   removeVideoAttributes() {
-    const attributes = ['class', 'sources', 'width', 'height'];
+    const attributes = ['class', 'sources'];
 
     attributes.forEach((attribute) => {
       this.shadowRoot.querySelector('video').removeAttribute(attribute);

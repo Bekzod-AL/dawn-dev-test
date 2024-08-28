@@ -50,6 +50,7 @@
     "custom_liquid_deW6Ay": {
       "type": "custom-liquid",
       "settings": {
+        "autoplay": false,
         "custom_liquid": "<div class=\"klaviyo-form-U9vvZM\"><\/div>",
         "color_scheme": "",
         "padding_top": 40,
