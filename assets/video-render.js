@@ -110,20 +110,12 @@ class LazyVideoComponent extends HTMLElement {
 
   addVideoAttributes(videoTag) {
     const allAtributes = this.getAttributeNames();
+    const rejected = ['class', 'sources'];
 
     allAtributes.forEach((attribute) => {
+      if (rejected.includes(attribute)) return;
       const value = this.getAttribute(attribute);
       videoTag.setAttribute(attribute, value);
-    });
-
-    this.removeVideoAttributes();
-  }
-
-  removeVideoAttributes() {
-    const attributes = ['class', 'sources'];
-
-    attributes.forEach((attribute) => {
-      this.shadowRoot.querySelector('video').removeAttribute(attribute);
     });
   }
 
@@ -136,6 +128,7 @@ class LazyVideoComponent extends HTMLElement {
   }
 
   getAspectRatio(width, height) {
+    if (width == null || height == null) return 'auto';
     if (width === 'auto' || height === 'auto') return 'auto';
 
     return parseInt(width) / parseInt(height);
