@@ -12,7 +12,40 @@ class AccordionMenu extends HTMLElement {
     super();
     this.accordion = this.querySelector('details');
     this.summaryTag = this.querySelector('summary');
-    this.content = this.querySelector('.content');
+    this.content = this.summaryTag.nextElementSibling;
+
+    // this.summary.nextElementSibling
+
+    this.insertAdjacentHTML(
+      'beforebegin',
+      `<style id="style-test">
+         details.accordion-menu-animated .content {
+         overflow-y: hidden;
+         opacity: 1;
+         transition: all 0.4s ease;
+        }
+
+        details.accordion-menu-animated .content.accordion-menu-closed {
+         max-height: 0;
+         margin: 0;
+         padding: 0;
+         opacity: 0;
+        }
+       </style>`
+    );
+
+    // details[open] > summary + * {
+    //     transition: all 2s ease;
+    //     overflow-y: hidden;
+    //     opacity: 1;
+    //   }
+
+    //   details:not([open]) > summary + * {
+    //     max-height: 0;
+    //     padding: 0;
+    //     margin: 0;
+    //     opacity: 0;
+    //   }
   }
 
   connectedCallback() {
