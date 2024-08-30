@@ -3,7 +3,7 @@
 // <accordion-menu>
 //   <details>
 //     <summary>Details</summary>
-//     <div class="content">Example content</div>
+//     <div>Example content</div>
 //   </details>
 // </accordion-menu>
 
@@ -13,43 +13,33 @@ class AccordionMenu extends HTMLElement {
     this.accordion = this.querySelector('details');
     this.summaryTag = this.querySelector('summary');
     this.content = this.summaryTag.nextElementSibling;
-
-    // this.summary.nextElementSibling
-
-    this.insertAdjacentHTML(
-      'beforebegin',
-      `<style id="style-test">
-         details.accordion-menu-animated .content {
-         overflow-y: hidden;
-         opacity: 1;
-         transition: all 0.4s ease;
-        }
-
-        details.accordion-menu-animated .content.accordion-menu-closed {
-         max-height: 0;
-         margin: 0;
-         padding: 0;
-         opacity: 0;
-        }
-       </style>`
-    );
-
-    // details[open] > summary + * {
-    //     transition: all 2s ease;
-    //     overflow-y: hidden;
-    //     opacity: 1;
-    //   }
-
-    //   details:not([open]) > summary + * {
-    //     max-height: 0;
-    //     padding: 0;
-    //     margin: 0;
-    //     opacity: 0;
-    //   }
+    this.ensureStyles();
   }
 
   connectedCallback() {
     this.initializeAccordion();
+  }
+
+  ensureStyles() {
+    if (!document.getElementById('accordion-menu-styles')) {
+      this.insertAdjacentHTML(
+        'beforebegin',
+        `<style id="accordion-menu-styles">
+           details.accordion-menu-animated > summary + * {
+            overflow-y: hidden;
+            opacity: 1;
+            transition: all 0.4s ease;
+          }
+  
+          details.accordion-menu-animated > summary + *.accordion-menu-closed {
+            max-height: 0;
+            margin: 0;
+            padding: 0;
+            opacity: 0;
+          }
+         </style>`
+      );
+    }
   }
 
   initializeAccordion() {
