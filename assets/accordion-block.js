@@ -1,13 +1,13 @@
-// Before using make sure to implement script tag in your liquid file: <script src="{{ 'accordion-menu.js' | asset_url }}" defer></script>
+// Before using make sure to implement script tag in your liquid file: <script src="{{ 'accordion-block.js' | asset_url }}" defer></script>
 // example code:
-// <accordion-menu>
+// <accordion-block>
 //   <details>
 //     <summary>Details</summary>
 //     <div>Example content</div>
 //   </details>
-// </accordion-menu>
+// </accordion-block>
 
-class AccordionMenu extends HTMLElement {
+class AccordionBlock extends HTMLElement {
   constructor() {
     super();
     this.accordion = this.querySelector('details');
@@ -20,18 +20,20 @@ class AccordionMenu extends HTMLElement {
     this.initializeAccordion();
   }
 
+  // rename accordion-block
+
   ensureStyles() {
-    if (!document.getElementById('accordion-menu-styles')) {
+    if (!document.getElementById('accordion-block-styles')) {
       this.insertAdjacentHTML(
         'beforebegin',
-        `<style id="accordion-menu-styles">
-           details.accordion-menu-animated > summary + * {
+        `<style id="accordion-block-styles">
+           accordion-block details > summary + * {
             overflow-y: hidden;
             opacity: 1;
             transition: all 0.4s ease;
           }
   
-          details.accordion-menu-animated > summary + *.accordion-menu-closed {
+          accordion-block details > summary + *.closed {
             max-height: 0;
             margin: 0;
             padding: 0;
@@ -48,10 +50,7 @@ class AccordionMenu extends HTMLElement {
   }
 
   addInitialClasses() {
-    const classAnimated = 'accordion-menu-animated';
-    const classClosed = 'accordion-menu-closed';
-
-    this.accordion.classList.add(classAnimated);
+    const classClosed = 'closed';
     this.content.classList.add(classClosed);
   }
 
@@ -76,7 +75,7 @@ class AccordionMenu extends HTMLElement {
 
   closeAccordion() {
     this.content.style.removeProperty('max-height');
-    this.content.classList.add('accordion-menu-closed');
+    this.content.classList.add('closed');
 
     setTimeout(() => {
       this.accordion.removeAttribute('open');
@@ -91,7 +90,7 @@ class AccordionMenu extends HTMLElement {
     }
 
     setTimeout(() => {
-      this.content.classList.remove('accordion-menu-closed');
+      this.content.classList.remove('closed');
       this.content.style.maxHeight = this.content.getAttribute('data-content-height');
     }, 0);
   }
@@ -103,4 +102,4 @@ class AccordionMenu extends HTMLElement {
   }
 }
 
-customElements.define('accordion-menu', AccordionMenu);
+customElements.define('accordion-block', AccordionBlock);
