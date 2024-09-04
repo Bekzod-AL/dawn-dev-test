@@ -20,26 +20,24 @@ class AccordionBlock extends HTMLElement {
     this.initializeAccordion();
   }
 
-  // rename accordion-block
-
   ensureStyles() {
     if (!document.getElementById('accordion-block-styles')) {
       this.insertAdjacentHTML(
         'beforebegin',
         `<style id="accordion-block-styles">
-           accordion-block details > summary + * {
-            overflow-y: hidden;
-            opacity: 1;
-            transition: all 0.4s ease;
-          }
-  
-          accordion-block details > summary + *.closed {
-            max-height: 0;
-            margin: 0;
-            padding: 0;
-            opacity: 0;
-          }
-         </style>`
+            accordion-block details > summary + * {
+              overflow-y: hidden;
+              opacity: 1;
+              transition: all 0.4s ease;
+            }
+    
+            accordion-block details > summary + *.closed {
+              max-height: 0;
+              margin: 0;
+              padding: 0;
+              opacity: 0;
+            }
+        </style>`
       );
     }
   }
@@ -70,7 +68,7 @@ class AccordionBlock extends HTMLElement {
   }
 
   isAccordionOpen() {
-    return this.accordion.hasAttribute('open');
+    return this.accordion.open;
   }
 
   closeAccordion() {
@@ -78,12 +76,12 @@ class AccordionBlock extends HTMLElement {
     this.content.classList.add('closed');
 
     setTimeout(() => {
-      this.accordion.removeAttribute('open');
+      this.accordion.open = false;
     }, 400);
   }
 
   openAccordion() {
-    this.accordion.setAttribute('open', '');
+    this.accordion.open = true;
 
     if (!this.content.getAttribute('data-content-height')) {
       this.setContentHeight();

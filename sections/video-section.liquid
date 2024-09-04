@@ -1,19 +1,14 @@
 <div class="video-section">
   <p class="video-section__title">{{ section.settings.title }}</p>
-
   <div class="video-section__media">
     {% render 'video-render',
       video: section.settings.video,
-      width: '800',
-      height: '400',
       autoplay: section.settings.autoplay,
-      muted: true,
       class: 'my-video',
-      part: 'lazy-video'
+      part: 'lazy-video',
+      full_width: true
     %}
   </div>
-
-  {% comment %} {{ section.settings.video | video_tag: image_size: '800x', controls: false, muted: true }} {% endcomment %}
 </div>
 
 <style>

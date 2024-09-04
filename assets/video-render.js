@@ -28,7 +28,7 @@ class LazyVideoComponent extends HTMLElement {
 
     this._isLoaded = false;
     this.observer = null;
-    this.createVideoSources();
+    this.update();
   }
 
   connectedCallback() {
@@ -89,7 +89,7 @@ class LazyVideoComponent extends HTMLElement {
     this.isLoaded = true;
   }
 
-  createVideoSources() {
+  update() {
     const videoTag = this.shadowRoot.querySelector('video');
     const videoSources = JSON.parse(this.getAttribute('sources'));
 
@@ -105,22 +105,30 @@ class LazyVideoComponent extends HTMLElement {
     this.addVideoAttributes(videoTag);
     this.removeComponentAttributes();
 
-    if (JSON.parse(videoTag.getAttribute('fullwidth'))) this.setFullWidth(videoTag);
+    if (videoTag.getAttribute('fullwidth')) this.setFullWidth(videoTag);
   }
 
   addVideoAttributes(videoTag) {
     const allAtributes = this.getAttributeNames();
-    const rejected = ['class', 'sources'];
 
     allAtributes.forEach((attribute) => {
-      if (rejected.includes(attribute)) return;
       const value = this.getAttribute(attribute);
       videoTag.setAttribute(attribute, value);
+    });
+
+    this.removeVideoAttributes();
+  }
+
+  removeVideoAttributes() {
+    const attributes = ['class', 'sources', 'width', 'height'];
+
+    attributes.forEach((attribute) => {
+      this.shadowRoot.querySelector('video').removeAttribute(attribute);
     });
   }
 
   removeComponentAttributes() {
-    const attributes = ['width', 'height', 'part'];
+    const attributes = ['width', 'height', 'part', 'fullwidth', 'loop'];
 
     attributes.forEach((attribute) => {
       this.removeAttribute(attribute);
@@ -128,7 +136,6 @@ class LazyVideoComponent extends HTMLElement {
   }
 
   getAspectRatio(width, height) {
-    if (width == null || height == null) return 'auto';
     if (width === 'auto' || height === 'auto') return 'auto';
 
     return parseInt(width) / parseInt(height);
