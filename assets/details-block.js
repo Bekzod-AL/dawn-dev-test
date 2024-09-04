@@ -13,6 +13,7 @@ class DetailsBlock extends HTMLElement {
     this.accordion = this.querySelector('details');
     this.summaryTag = this.querySelector('summary');
     this.content = this.summaryTag.nextElementSibling;
+
     this.animation = null;
     this.isClosing = false;
     this.isExpanding = false;
@@ -23,7 +24,6 @@ class DetailsBlock extends HTMLElement {
   initializeAccordion() {
     this.summaryTag.addEventListener('click', (e) => {
       e.preventDefault();
-
       this.accordion.style.overflow = 'hidden';
 
       if (this.isClosing || !this.accordion.open) {
@@ -49,32 +49,13 @@ class DetailsBlock extends HTMLElement {
       this.animation.cancel();
     }
 
-    this.animation = this.accordion.animate(
-      {
-        height: [startHeight, endHeight],
-      },
-      {
-        duration: 400,
-        easing: 'ease-out',
-      }
-    );
+    this.animateAccordion(startHeight, endHeight);
 
-    this.animation.onfinish = () => this.onAnimationFinish(true);
+    this.animation.onfinish = () => this.resetStates(true);
     this.animation.oncancel = () => (this.isExpanding = false);
   }
 
-  onAnimationFinish(open) {
-    this.accordion.open = open;
-    this.animation = null;
-    this.isClosing = false;
-    this.isExpanding = false;
-
-    this.accordion.style.height = '';
-    this.accordion.style.overflow = '';
-  }
-
   close() {
-    console.log('enter');
     this.isClosing = true;
     const startHeight = `${this.accordion.offsetHeight}px`;
     const endHeight = `${this.summaryTag.offsetHeight}px`;
@@ -83,18 +64,32 @@ class DetailsBlock extends HTMLElement {
       this.animation.cancel();
     }
 
+    this.animateAccordion(startHeight, endHeight);
+
+    this.animation.onfinish = () => this.resetStates(false);
+    this.animation.oncancel = () => (this.isClosing = false);
+  }
+
+  animateAccordion(startValue, endValue) {
     this.animation = this.accordion.animate(
       {
-        height: [startHeight, endHeight],
+        height: [startValue, endValue],
       },
       {
         duration: 400,
         easing: 'ease-out',
       }
     );
+  }
 
-    this.animation.onfinish = () => this.onAnimationFinish(false);
-    this.animation.oncancel = () => (this.isClosing = false);
+  resetStates(accordionStatus) {
+    this.accordion.open = accordionStatus;
+    this.animation = null;
+    this.isClosing = false;
+    this.isExpanding = false;
+
+    this.accordion.style.height = '';
+    this.accordion.style.overflow = '';
   }
 }
 
