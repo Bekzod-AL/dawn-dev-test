@@ -1,5 +1,5 @@
 <script src="{{ 'accordion-block.js' | asset_url }}" defer></script>
-<script src="{{ 'details-block.js' | asset_url }}" defer></script>
+<script src="{{ 'section-render.js' | asset_url }}" defer></script>
 
 {%- style -%}
   .section-{{ section.id }}-padding {
@@ -19,108 +19,56 @@
     margin: 0 auto;
     max-width: 100%;
   }
-
-  /* accordion menu  */
-
-
-
-  /* summary {
-    list-style-type: none;
-    position: relative;
-    cursor: pointer;
-  }
-
-  summary:focus {
-    background-color: #eee;
-    outline: none;
-  }
-
-  summary::after {
-    content: '+';
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-  }
-
-  details,
-  summary {
-    display: block;
-  }
-
-  details {
-    border-top: 1px solid #eee;
-  }
-
-  details[open] summary::after {
-    content: '-';
-  }
-
-  details:focus-within {
-    background-color: #eee;
-  }
-
-  summary {
-    margin-bottom: 0;
-    padding-right: 1.5rem;
-    font-weight: 700;
-  }
-
-  summary .content {
-    margin-top: 14px;
-  } */
 {%- endstyle -%}
+
 <div class="color-{{ section.settings.color_scheme }} gradient">
   <div class="section-{{ section.id }}-padding">
     {{ section.settings.custom_liquid }}
   </div>
 
-  <div class="container">
-    <details-block>
-      <details>
-        <summary>New block</summary>
-        <div>
-          qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et
-          expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id
-          quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem
-          quibusdam et
-        </div>
-      </details>
-    </details-block>
-    <accordion-block>
-      <details>
-        <summary>Details</summary>
-        <div>
-          "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti
-          atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique
-          sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum
-          facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil
-          impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor
-          repellendus. Temporibus autem quibusdam et
-        </div>
-      </details>
-    </accordion-block>
-    <accordion-block>
-      <details>
-        <summary>Details 2</summary>
-        <div>
-          "On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and demoralized
-          by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee the pain and trouble
-          that are bound to ensue; and equal blame belongs to those who fail in their
-        </div>
-      </details>
-    </accordion-block>
-    <accordion-block>
-      <details>
-        <summary>Details 3</summary>
-        <div>
-          when our power of choice is untrammelled and when nothing prevents our being able to do what we like best,
-          every pleasure is to be welcomed and every pain avoided. But in certain circumstances and owing to the claims
-          of duty or the obligations of business it will frequently occur
-        </div>
-      </details>
-    </accordion-block>
-  </div>
+  <section-render>
+    <div class="container">
+      <button section-render-trigger="custom-id">Change</button>
+
+      <div section-render-target="custom-id" section-render-url="{{ shop.url }}?section_id={{ section.id }}">1</div>
+
+      <hr>
+
+      <accordion-block data-animation-style="ease-in" data-animation-duration="600">
+        <details>
+          <summary>Details</summary>
+          <div>
+            "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti
+            atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique
+            sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum
+            facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil
+            impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor
+            repellendus. Temporibus autem quibusdam et
+          </div>
+        </details>
+      </accordion-block>
+      <accordion-block>
+        <details>
+          <summary>Details 2</summary>
+          <div>
+            "On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and
+            demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee the pain
+            and trouble that are bound to ensue; and equal blame belongs to those who fail in their
+          </div>
+        </details>
+      </accordion-block>
+      <accordion-block>
+        <details>
+          <summary>Details 3</summary>
+          <div>
+            when our power of choice is untrammelled and when nothing prevents our being able to do what we like best,
+            every pleasure is to be welcomed and every pain avoided. But in certain circumstances and owing to the
+            claims of duty or the obligations of business it will frequently occur
+          </div>
+        </details>
+      </accordion-block>
+    </div>
+  </section-render>
 </div>
 
 {% schema %}
