@@ -3,13 +3,17 @@ class SectionRender extends HTMLElement {
     super();
 
     this.triggerButtons = this.querySelectorAll('[section-render-trigger]');
-    this.renderTargets = this.querySelectorAll('[section-render-target]');
     this._url = null;
+    // create vars for attr
+    // rename button
+    // use params to pass url
+    // remove get set
   }
 
   connectedCallback() {
     this.triggerButtons.forEach((button) => {
-      button.addEventListener('click', () => {
+      button.addEventListener('click', (e) => {
+        e.preventDefault();
         this.handleTrigger(button);
       });
     });
@@ -49,7 +53,6 @@ class SectionRender extends HTMLElement {
       section.innerHTML = updatedContent.innerHTML;
     } catch (error) {
       console.error('Error on section loading:', error);
-      section.innerHTML = '<p>Error loading data. Please try again or make sure the section exists.</p>';
     }
   }
 }

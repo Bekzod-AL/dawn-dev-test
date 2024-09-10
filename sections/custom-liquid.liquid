@@ -29,16 +29,20 @@
   <section-render>
     <div class="container">
       {% comment %} triggers {% endcomment %}
-      <button section-render-trigger="custom-content" section-render-url="{{ shop.url }}?section_id=contact-form">
-        Contact form
-      </button>
-
-      <button
+      <a
+        href="google.com"
         section-render-trigger="custom-content"
-        section-render-url="{{ shop.url }}?section_id=featured-log"
+        section-render-url="{{ shop.url }}?section_id=contact-form"
+      >
+        Contact form
+      </a>
+
+      <div
+        section-render-trigger="custom-content"
+        section-render-url="{{ shop.url }}?section_id=featured-blog"
       >
         Featured blog
-      </button>
+      </div>
 
       <button
         section-render-trigger="custom-content-2"
@@ -85,6 +89,7 @@
         </accordion-block>
       </div>
 
+      <div section-render-target="custom-content-2">Second content...</div>
       <div section-render-target="custom-content-2">Second content...</div>
 
       <hr>
