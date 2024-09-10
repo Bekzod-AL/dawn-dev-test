@@ -28,45 +28,66 @@
 
   <section-render>
     <div class="container">
-      <button section-render-trigger="custom-id">Change</button>
+      {% comment %} triggers {% endcomment %}
+      <button section-render-trigger="custom-content" section-render-url="{{ shop.url }}?section_id=contact-form">
+        Contact form
+      </button>
 
-      <div section-render-target="custom-id" section-render-url="{{ shop.url }}?section_id={{ section.id }}">1</div>
+      <button
+        section-render-trigger="custom-content"
+        section-render-url="{{ shop.url }}?section_id=featured-log"
+      >
+        Featured blog
+      </button>
+
+      <button
+        section-render-trigger="custom-content-2"
+        section-render-url="{{ shop.url }}?section_id=image-with-text"
+      >
+        Image with text
+      </button>
+
+      {% comment %} Targets {% endcomment %}
+
+      <div section-render-target="custom-content">
+        <accordion-block data-animation-style="ease-in" data-animation-duration="600">
+          <details>
+            <summary>Details</summary>
+            <div>
+              "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti
+              atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique
+              sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum
+              facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil
+              impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor
+              repellendus. Temporibus autem quibusdam et
+            </div>
+          </details>
+        </accordion-block>
+        <accordion-block>
+          <details>
+            <summary>Details 2</summary>
+            <div>
+              "On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and
+              demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee the
+              pain and trouble that are bound to ensue; and equal blame belongs to those who fail in their
+            </div>
+          </details>
+        </accordion-block>
+        <accordion-block>
+          <details>
+            <summary>Details 3</summary>
+            <div>
+              when our power of choice is untrammelled and when nothing prevents our being able to do what we like best,
+              every pleasure is to be welcomed and every pain avoided. But in certain circumstances and owing to the
+              claims of duty or the obligations of business it will frequently occur
+            </div>
+          </details>
+        </accordion-block>
+      </div>
+
+      <div section-render-target="custom-content-2">Second content...</div>
 
       <hr>
-
-      <accordion-block data-animation-style="ease-in" data-animation-duration="600">
-        <details>
-          <summary>Details</summary>
-          <div>
-            "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti
-            atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique
-            sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum
-            facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil
-            impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor
-            repellendus. Temporibus autem quibusdam et
-          </div>
-        </details>
-      </accordion-block>
-      <accordion-block>
-        <details>
-          <summary>Details 2</summary>
-          <div>
-            "On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and
-            demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee the pain
-            and trouble that are bound to ensue; and equal blame belongs to those who fail in their
-          </div>
-        </details>
-      </accordion-block>
-      <accordion-block>
-        <details>
-          <summary>Details 3</summary>
-          <div>
-            when our power of choice is untrammelled and when nothing prevents our being able to do what we like best,
-            every pleasure is to be welcomed and every pain avoided. But in certain circumstances and owing to the
-            claims of duty or the obligations of business it will frequently occur
-          </div>
-        </details>
-      </accordion-block>
     </div>
   </section-render>
 </div>

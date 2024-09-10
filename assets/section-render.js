@@ -2,39 +2,55 @@ class SectionRender extends HTMLElement {
   constructor() {
     super();
 
-    this.triggerAttribute = 'section-render-trigger';
-    this.sectionAttribute = 'section-render-target';
+    this.triggerButtons = this.querySelectorAll('[section-render-trigger]');
+    this.renderTargets = this.querySelectorAll('[section-render-target]');
+    this._url = null;
   }
 
   connectedCallback() {
-    const trigger = this.querySelector(`[${this.triggerAttribute}]`);
-    const triggerId = trigger.getAttribute(`${this.triggerAttribute}`);
-
-    const section = this.querySelector(`[section-render-target="${triggerId}"]`);
-
-    this.initializeTrigger(trigger, section);
-  }
-
-  initializeTrigger(trigger, section) {
-    trigger.addEventListener('click', () => {
-      this.updateSection(section);
+    this.triggerButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        this.handleTrigger(button);
+      });
     });
   }
 
-  async updateSection(section) {
-    const sectionTarget = section.getAttribute(`${this.sectionAttribute}`);
-    const url = section.getAttribute('section-render-url');
+  get url() {
+    return this._url;
+  }
 
-    console.log(section);
-    console.log(sectionTarget);
+  set url(newUrl) {
+    this._url = newUrl;
+  }
 
-    const res = await fetch(`${url}`);
-    const content = await res.text();
+  handleTrigger(button) {
+    const url = button.getAttribute('section-render-url');
+    const sectionId = button.getAttribute('section-render-trigger');
 
-    const updatedContent = document.createElement('div');
-    updatedContent.innerHTML = content;
+    this.url = url;
 
-    section.innerHTML = updatedContent.querySelector(`[${this.sectionAttribute}=${sectionTarget}]`).innerHTML;
+    this.updateSection(sectionId);
+  }
+
+  async updateSection(sectionId) {
+    const section = this.querySelector(`[section-render-target=${sectionId}]`);
+
+    try {
+      const res = await fetch(this.url);
+
+      if (!res.ok) {
+        throw new Error(`Load error: ${res.status} ${res.statusText}`);
+      }
+
+      const content = await res.text();
+      const updatedContent = document.createElement('div');
+      updatedContent.innerHTML = content;
+
+      section.innerHTML = updatedContent.innerHTML;
+    } catch (error) {
+      console.error('Error on section loading:', error);
+      section.innerHTML = '<p>Error loading data. Please try again or make sure the section exists.</p>';
+    }
   }
 }
 
