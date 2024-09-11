@@ -1,43 +1,28 @@
 class SectionRender extends HTMLElement {
   constructor() {
     super();
+    this.renderTriggerAttr = 'section-render-trigger';
+    this.renderTargetAttr = 'section-render-target';
 
-    this.triggerButtons = this.querySelectorAll('[section-render-trigger]');
-    this._url = null;
-    // create vars for attr
-    // rename button
-    // use params to pass url
-    // remove get set
+    this.triggerButtons = this.querySelectorAll(`[${this.renderTriggerAttr}]`);
+    this.url = null;
   }
 
   connectedCallback() {
-    this.triggerButtons.forEach((button) => {
-      button.addEventListener('click', (e) => {
+    this.triggerButtons.forEach((el) => {
+      el.addEventListener('click', (e) => {
         e.preventDefault();
-        this.handleTrigger(button);
+
+        const sectionId = el.getAttribute(this.renderTriggerAttr);
+        this.url = el.getAttribute('section-render-url');
+
+        this.updateSection(sectionId);
       });
     });
   }
 
-  get url() {
-    return this._url;
-  }
-
-  set url(newUrl) {
-    this._url = newUrl;
-  }
-
-  handleTrigger(button) {
-    const url = button.getAttribute('section-render-url');
-    const sectionId = button.getAttribute('section-render-trigger');
-
-    this.url = url;
-
-    this.updateSection(sectionId);
-  }
-
   async updateSection(sectionId) {
-    const section = this.querySelector(`[section-render-target=${sectionId}]`);
+    const section = this.querySelector(`[${this.renderTargetAttr}=${sectionId}]`);
 
     try {
       const res = await fetch(this.url);
