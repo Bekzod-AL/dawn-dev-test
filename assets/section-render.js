@@ -3,9 +3,13 @@ class SectionRender extends HTMLElement {
     super();
     this.renderTriggerAttr = 'section-render-trigger';
     this.renderTargetAttr = 'section-render-target';
+    this.renderUrlAttr = 'section-render-url';
 
     this.triggerButtons = this.querySelectorAll(`[${this.renderTriggerAttr}]`);
     this.url = null;
+
+    // test multiple contents
+    // 2 section in 1 trigger
   }
 
   connectedCallback() {
@@ -14,7 +18,7 @@ class SectionRender extends HTMLElement {
         e.preventDefault();
 
         const sectionId = el.getAttribute(this.renderTriggerAttr);
-        this.url = el.getAttribute('section-render-url');
+        this.url = el.getAttribute(this.renderUrlAttr);
 
         this.updateSection(sectionId);
       });
@@ -32,6 +36,7 @@ class SectionRender extends HTMLElement {
       }
 
       const content = await res.text();
+
       const updatedContent = document.createElement('div');
       updatedContent.innerHTML = content;
 
