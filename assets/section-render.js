@@ -26,7 +26,7 @@ class SectionRender extends HTMLElement {
   }
 
   async updateSection(sectionId) {
-    const section = this.querySelector(`[${this.renderTargetAttr}=${sectionId}]`);
+    const sections = this.querySelectorAll(`[${this.renderTargetAttr}=${sectionId}]`);
 
     try {
       const res = await fetch(this.url);
@@ -40,7 +40,9 @@ class SectionRender extends HTMLElement {
       const updatedContent = document.createElement('div');
       updatedContent.innerHTML = content;
 
-      section.innerHTML = updatedContent.innerHTML;
+      sections.forEach((section) => {
+        section.innerHTML = updatedContent.innerHTML;
+      });
     } catch (error) {
       console.error('Error on section loading:', error);
     }
