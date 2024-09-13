@@ -29,32 +29,25 @@
   <section-render>
     <div class="container">
       {% comment %} triggers {% endcomment %}
-      <a
-        href="google.com"
+      <button
         section-render-trigger="custom-content,custom-content-same"
-        section-render-url="{{ shop.url }}?sections=contact-form,{{ section.id }}"
+        section-render-url="{{ shop.url }}?sections=contact-form,featured-blog"
       >
         Contact form
-      </a>
+      </button>
 
-      <div
-        section-render-trigger="custom-content"
+      <button
+        section-render-trigger="custom-content-2"
         section-render-url="{{ shop.url }}?section_id={{ section.id }}"
       >
         Featured blog
-      </div>
+      </button>
 
       {% comment %} Targets {% endcomment %}
 
       <div section-render-content="custom-content">1 content...</div>
       <div section-render-content="custom-content-same">same</div>
-      {% comment %}
-        <div section-render-content="custom-content-2">2 content...</div>
-        <div section-render-content="custom-content-2">3 content...</div>
-        <div section-render-content="custom-content-2">4 content...</div>
-        <div section-render-content="custom-content-2">5 content...</div>
-        <div section-render-content="custom-content-3">6 content...</div>
-      {% endcomment %}
+      <div section-render-content="custom-content-2">2 content</div>
 
       <hr>
     </div>

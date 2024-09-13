@@ -71,28 +71,17 @@ class SectionRender extends HTMLElement {
 
     sections.forEach((section) => {
       const contentId = section.getAttribute(this.renderTargetAttr);
-      console.log(section);
 
       if (sectionsMarkup[contentId]) {
         contentContainer.innerHTML = sectionsMarkup[contentId];
-        const isTheSameSection = contentContainer.querySelector('section-render');
 
-        if (isTheSameSection) {
-          console.log(section);
-          // section.innerHTML = isTheSameSection.innerHTML;
-
-          console.log('yes, the same');
-        } else {
-          console.log('no');
-          section.innerHTML = contentContainer.innerHTML;
-        }
+        section.innerHTML = contentContainer.innerHTML;
       }
     });
   }
 
   renderSingleContent(sections, response, contentContainer) {
     contentContainer.innerHTML = response;
-    console.log(contentContainer.querySelectorAll('section-render'));
 
     sections.forEach((section) => {
       section.innerHTML = contentContainer.innerHTML;
