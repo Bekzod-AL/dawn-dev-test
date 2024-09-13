@@ -2,15 +2,11 @@ class SectionRender extends HTMLElement {
   constructor() {
     super();
     this.renderTriggerAttr = 'section-render-trigger';
-    this.renderTargetAttr = 'section-render-target';
+    this.renderTargetAttr = 'section-render-content';
     this.renderUrlAttr = 'section-render-url';
 
     this.triggerButtons = this.querySelectorAll(`[${this.renderTriggerAttr}]`);
     this.url = null;
-
-    // rename target to content
-    // divide into functions
-    // rename variables
   }
 
   connectedCallback() {
@@ -19,12 +15,11 @@ class SectionRender extends HTMLElement {
         e.preventDefault();
 
         let sectionId = el.getAttribute(this.renderTriggerAttr);
+        this.url = el.getAttribute(this.renderUrlAttr);
 
         if (sectionId.includes(',')) {
           sectionId = sectionId.split(',');
         }
-
-        this.url = el.getAttribute(this.renderUrlAttr);
 
         this.updateSection(sectionId);
       });
@@ -47,39 +42,49 @@ class SectionRender extends HTMLElement {
         throw new Error(`Load error: ${res.status} ${res.statusText}`);
       }
 
-      const content = await res.text();
+      const responseData = await res.text();
 
-      let updatedContent = document.createElement('div');
+      let contentContainer = document.createElement('div');
 
-      if (this.isJsonObject(content)) {
-        const object = JSON.parse(content);
-        const objectKeys = Object.keys(object);
-
-        const sectionIdsData = sectionIds.reduce((accumulator, sectionId, index) => {
-          if (objectKeys[index]) {
-            accumulator[sectionId] = object[objectKeys[index]];
-          }
-          return accumulator;
-        }, {});
-
-        sections.forEach((section) => {
-          const targetId = section.getAttribute(this.renderTargetAttr);
-
-          if (sectionIdsData[targetId]) {
-            updatedContent.innerHTML = sectionIdsData[targetId];
-            section.innerHTML = updatedContent.innerHTML;
-          }
-        });
+      if (this.isJsonObject(responseData)) {
+        this.renderMultipleContents(sections, responseData, sectionIds, contentContainer);
       } else {
-        updatedContent.innerHTML = content;
-
-        sections.forEach((section) => {
-          section.innerHTML = updatedContent.innerHTML;
-        });
+        this.renderSingleContent(sections, responseData, contentContainer);
       }
     } catch (error) {
       console.error('Error on section loading:', error);
     }
+  }
+
+  renderMultipleContents(sections, response, sectionIds, contentContainer) {
+    const parsedResponse = JSON.parse(response);
+    const parsedResponseKeys = Object.keys(parsedResponse);
+
+    const sectionsMarkup = sectionIds.reduce((accumulator, sectionId, index) => {
+      const sectionName = parsedResponseKeys[index];
+
+      if (sectionName) {
+        accumulator[sectionId] = parsedResponse[sectionName];
+      }
+      return accumulator;
+    }, {});
+
+    sections.forEach((section) => {
+      const contentId = section.getAttribute(this.renderTargetAttr);
+
+      if (sectionsMarkup[contentId]) {
+        contentContainer.innerHTML = sectionsMarkup[contentId];
+        section.innerHTML = contentContainer.innerHTML;
+      }
+    });
+  }
+
+  renderSingleContent(sections, response, contentContainer) {
+    contentContainer.innerHTML = response;
+
+    sections.forEach((section) => {
+      section.innerHTML = contentContainer.innerHTML;
+    });
   }
 
   isJsonObject(str) {
