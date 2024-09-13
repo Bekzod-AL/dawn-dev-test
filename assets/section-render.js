@@ -5,6 +5,8 @@
     sections passed in the attributes.
 
     Example usage:
+
+    <script src="{{ 'section-render.js' | asset_url }}" defer></script>
     
     <section-render>
         <!-- Button triggers rendering of two sections in order -->

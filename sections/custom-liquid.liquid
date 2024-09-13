@@ -28,28 +28,33 @@
 
   <section-render>
     <div class="container">
-      {% comment %} triggers {% endcomment %}
-      <button
-        section-render-trigger="custom-content,custom-content-same"
-        section-render-url="{{ shop.url }}?sections=contact-form,featured-blog"
-      >
-        Contact form
-      </button>
+      <section-render>
+        <button
+          section-render-trigger="custom-content,custom-content-2"
+          section-render-url="{{ shop.url }}?sections=contact-form,featured-blog"
+        >
+          Trigger button 1
+        </button>
 
-      <button
-        section-render-trigger="custom-content-2"
-        section-render-url="{{ shop.url }}?section_id={{ section.id }}"
-      >
-        Featured blog
-      </button>
+        <button
+          section-render-trigger="custom-content-3"
+          section-render-url="{{ shop.url }}?section_id=contact-form"
+        >
+          Trigger button 2
+        </button>
 
-      {% comment %} Targets {% endcomment %}
+        <button
+          section-render-trigger="custom-content-4"
+          section-render-url="{{ shop.url }}?section_id={{ section.id }}"
+        >
+          Trigger button 3 (with section id)
+        </button>
 
-      <div section-render-content="custom-content">1 content...</div>
-      <div section-render-content="custom-content-same">same</div>
-      <div section-render-content="custom-content-2">2 content</div>
-
-      <hr>
+        <div section-render-content="custom-content">1 content...</div>
+        <div section-render-content="custom-content-2">2 content</div>
+        <div section-render-content="custom-content-3">3 content</div>
+        <div section-render-content="custom-content-4">4 content (section id)</div>
+      </section-render>
     </div>
   </section-render>
 </div>
