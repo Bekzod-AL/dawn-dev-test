@@ -1,3 +1,45 @@
+{
+  /*
+    This component dynamically renders sections specified in the triggers.
+    It listens for button clicks and fetches HTML content based on the 
+    sections passed in the attributes.
+
+    Example usage:
+    
+    <section-render>
+        <!-- Button triggers rendering of two sections in order -->
+        <button
+          section-render-trigger="custom-content,custom-content-2"
+          section-render-url="{{ shop.url }}?sections=contact-form,featured-blog"
+        >
+          Trigger button 1
+        </button>
+
+        <!-- Button triggers rendering of one section -->
+        <button
+          section-render-trigger="custom-content-3"
+          section-render-url="{{ shop.url }}?section_id=contact-form"
+        >
+          Trigger button 2
+        </button>
+
+        <!-- Containers to render fetched content -->
+        <div section-render-content="custom-content">1 content...</div>
+        <div section-render-content="custom-content-2">2 content</div>
+        <div section-render-content="custom-content-3">3 content</div>
+    </section-render>
+
+    !!! Important !!!
+    The order of IDs in the trigger attribute (section-render-trigger) must match 
+    the order of the sections in the URL (section-render-url).
+    For example: 
+    section-render-trigger="custom-content,custom-content-2" 
+    should correspond to 
+    section-render-url="?sections=contact-form,featured-blog", 
+    meaning "custom-content" will render "contact-form" and "custom-content-2" will render "featured-blog".
+  */
+}
+
 class SectionRender extends HTMLElement {
   constructor() {
     super();
