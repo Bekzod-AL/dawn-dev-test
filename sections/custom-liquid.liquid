@@ -31,8 +31,8 @@
       {% comment %} triggers {% endcomment %}
       <a
         href="google.com"
-        section-render-trigger="custom-content,custom-content-2,custom-content-3"
-        section-render-url="{{ shop.url }}?sections=contact-form,featured-blog,image-with-text"
+        section-render-trigger="custom-content,custom-content-same"
+        section-render-url="{{ shop.url }}?sections=contact-form,{{ section.id }}"
       >
         Contact form
       </a>
@@ -44,28 +44,17 @@
         Featured blog
       </div>
 
-      <button
-        section-render-trigger="custom-content-2"
-        section-render-url="{{ shop.url }}?section_id=image-with-text"
-      >
-        Image with text
-      </button>
-
-      <button
-        section-render-trigger="custom-content-3"
-        section-render-url="{{ shop.url }}?section_id=contact-form"
-      >
-        Update 6 content
-      </button>
-
       {% comment %} Targets {% endcomment %}
 
       <div section-render-content="custom-content">1 content...</div>
-      <div section-render-content="custom-content-2">2 content...</div>
-      <div section-render-content="custom-content-2">3 content...</div>
-      <div section-render-content="custom-content-2">4 content...</div>
-      <div section-render-content="custom-content-2">5 content...</div>
-      <div section-render-content="custom-content-3">6 content...</div>
+      <div section-render-content="custom-content-same">same</div>
+      {% comment %}
+        <div section-render-content="custom-content-2">2 content...</div>
+        <div section-render-content="custom-content-2">3 content...</div>
+        <div section-render-content="custom-content-2">4 content...</div>
+        <div section-render-content="custom-content-2">5 content...</div>
+        <div section-render-content="custom-content-3">6 content...</div>
+      {% endcomment %}
 
       <hr>
     </div>
