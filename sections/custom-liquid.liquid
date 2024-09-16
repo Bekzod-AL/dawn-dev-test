@@ -1,5 +1,6 @@
 <script src="{{ 'accordion-block.js' | asset_url }}" defer></script>
 <script src="{{ 'section-render.js' | asset_url }}" defer></script>
+<script src="{{ 'pred-search.js' | asset_url }}" defer></script>
 
 {%- style -%}
   .section-{{ section.id }}-padding {
@@ -19,12 +20,29 @@
     margin: 0 auto;
     max-width: 100%;
   }
+
+  .pred-search-section__title {
+    background-color: tomato;
+  }
 {%- endstyle -%}
 
 <div class="color-{{ section.settings.color_scheme }} gradient">
   <div class="section-{{ section.id }}-padding">
     {{ section.settings.custom_liquid }}
   </div>
+
+  <div class="container">
+    <pred-search>
+      <p>Predictive search</p>
+      <input
+        type="search"
+        value="{{ search.terms |  escape }}"
+      >
+      <div data-pred-search></div>
+    </pred-search>
+  </div>
+
+  <hr>
 
   <div class="container">
     <section-render>
