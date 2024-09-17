@@ -1,6 +1,6 @@
 <script src="{{ 'accordion-block.js' | asset_url }}" defer></script>
 <script src="{{ 'section-render.js' | asset_url }}" defer></script>
-<script src="{{ 'pred-search.js' | asset_url }}" defer></script>
+<script src="{{ 'custom-predictive-search.js' | asset_url }}" defer></script>
 
 {%- style -%}
   .section-{{ section.id }}-padding {
@@ -20,11 +20,42 @@
     margin: 0 auto;
     max-width: 100%;
   }
-
-  .pred-search-section__title {
-    background-color: tomato;
-  }
 {%- endstyle -%}
+
+<style>
+  div[data-predictive-results] {
+    background-color: #f5f5f5;
+    padding: 15px 20px;
+  }
+
+  .render-search__products-title {
+    margin: 0;
+    border-bottom: 1px solid #dbdbdb;
+  }
+
+  .render-search__product {
+    cursor: pointer;
+    padding: 10px 0;
+  }
+
+  .render-search__product:hover {
+    background-color: #ececec;
+  }
+
+  .render-search__product a {
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  input[type='search'] {
+    width: 100%;
+    padding: 10px 15px;
+    outline: none;
+    box-shadow: none;
+  }
+</style>
 
 <div class="color-{{ section.settings.color_scheme }} gradient">
   <div class="section-{{ section.id }}-padding">
@@ -32,13 +63,18 @@
   </div>
 
   <div class="container">
-    <pred-search>
+    <pred-search
+      content-id="data-search-content"
+      resources[type]="product"
+      resources[limit]="5"
+      resources[options][unavailable_products]="hide"
+    >
       <p>Predictive search</p>
       <input
         type="search"
         value="{{ search.terms |  escape }}"
       >
-      <div data-pred-search></div>
+      <div data-predictive-results></div>
     </pred-search>
   </div>
 

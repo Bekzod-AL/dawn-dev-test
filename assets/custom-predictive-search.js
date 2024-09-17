@@ -2,28 +2,24 @@ class PredSearch extends HTMLElement {
   constructor() {
     super();
     this.input = this.querySelector('input[type="search"]');
-    this.predictiveSearchResults = this.querySelector('[data-pred-search]');
+    this.predictiveSearchResults = this.querySelector('[data-predictive-results]');
+    this.predictiveSearchContentAttribute = this.getAttribute('content-id');
     this.searchTerm = null;
     this.debounceTimer = null;
-
-    // change id into the data-attr
-    // rename pred-search
-    // render-.... | pred-search.liquid
-    // add additional attributes
-    // timer attr for debounce | 400
+    this.debounceTime = this.getAttribute('timer') || 400;
 
     this.initializeListeners();
   }
 
   initializeListeners() {
-    this.input.addEventListener('keyup', this.debounce(this.search.bind(this), 400));
+    this.input.addEventListener('input', this.debounce(this.search.bind(this), parseInt(this.debounceTime)));
   }
 
   async search() {
     this.searchTerm = this.input.value;
 
     if (this.searchTerm.trim().length > 0) {
-      const url = `search/suggest?q=${this.searchTerm}&section_id=pred-search`;
+      const url = this.buildFullUrl();
 
       const resultsMarkup = await this.fetchResults(url);
       this.renderResults(resultsMarkup);
@@ -43,12 +39,29 @@ class PredSearch extends HTMLElement {
       const responseData = await res.text();
       const resultsMarkup = new DOMParser()
         .parseFromString(responseData, 'text/html')
-        .querySelector('#pred-search-section').innerHTML;
+        .querySelector(`[${this.predictiveSearchContentAttribute}]`).innerHTML;
 
       return resultsMarkup;
     } catch (error) {
       console.error('Error:', error);
     }
+  }
+
+  buildFullUrl() {
+    const attributes = this.getAttributeNames();
+    let url = `search/suggest?q=${this.searchTerm}`;
+
+    const rejected = ['id', 'class', 'content-id'];
+
+    attributes.forEach((attribute) => {
+      if (rejected.includes(attribute)) return;
+
+      const value = this.getAttribute(attribute);
+
+      if (value) url += `&${attribute}=${value}`;
+    });
+
+    return url + '&section_id=render-search-results';
   }
 
   renderResults(markup) {
