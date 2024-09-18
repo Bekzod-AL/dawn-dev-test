@@ -28,25 +28,52 @@
     padding: 15px 20px;
   }
 
-  .render-search__products-title {
+  .render-search__title {
     margin: 0;
     border-bottom: 1px solid #dbdbdb;
   }
 
-  .render-search__product {
+  .render-search__item {
     cursor: pointer;
     padding: 10px 0;
   }
 
-  .render-search__product:hover {
+  .render-search__item:hover {
     background-color: #ececec;
   }
 
-  .render-search__product a {
+  .render-search__item a {
     font-size: 14px;
     display: flex;
     align-items: center;
     gap: 10px;
+  }
+
+  .render-search__wrapper {
+    display: flex;
+    gap: 20px;
+  }
+
+  .render-search__column.full-width {
+    flex-basis: 100%;
+  }
+
+  .render-search__column {
+    display: flex;
+    gap: 20px;
+  }
+
+  .render-search__column-first {
+    flex-basis: 40%;
+    flex-direction: column;
+  }
+
+  .render-search__column-second {
+    flex-basis: 100%;
+  }
+
+  .render-search__products {
+    width: 100%;
   }
 
   input[type='search'] {
@@ -65,8 +92,7 @@
   <div class="container">
     <pred-search
       content-id="data-search-content"
-      resources[type]="product"
-      resources[limit]="5"
+      resources[limit]="10"
       resources[options][unavailable_products]="hide"
     >
       <p>Predictive search</p>
