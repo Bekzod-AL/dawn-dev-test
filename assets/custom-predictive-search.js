@@ -12,10 +12,12 @@
 
     Example usage:
 
+    <script src="{{ 'predictive-search.js' | asset_url }}" defer></script>
+
     <prediction-search
       content-id="data-search-content"
       timer="400"
-      resources[type]="products, queries"
+      resources[type]="product,query,collection"
       resources[limit]="10"
       resources[options][unavailable_products]="hide"
     >
@@ -81,7 +83,7 @@ class PredSearch extends HTMLElement {
     const attributes = this.getAttributeNames();
     let url = `search/suggest?q=${this.searchTerm}`;
 
-    const rejected = ['id', 'class', 'content-id'];
+    const rejected = ['id', 'class', 'content-id', 'timer'];
 
     attributes.forEach((attribute) => {
       if (rejected.includes(attribute)) return;
