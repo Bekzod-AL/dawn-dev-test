@@ -1,3 +1,69 @@
+{% comment %}
+  You can change this html and styles as you want. Styles have to be in section where you place predictive-search component.
+
+  <style>
+    .search-results {
+      background-color: #f5f5f5;
+      padding: 15px 20px;
+    }
+
+    .render-search__title {
+      margin: 0;
+      border-bottom: 1px solid #dbdbdb;
+    }
+
+    .render-search__item {
+      cursor: pointer;
+      padding: 10px 0;
+    }
+
+    .render-search__item:hover {
+      background-color: #ececec;
+    }
+
+    .render-search__item a {
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .render-search__wrapper {
+      display: flex;
+      gap: 20px;
+    }
+
+    .render-search__column.full-width {
+      flex-basis: 100%;
+    }
+
+    .render-search__column {
+      display: flex;
+      gap: 20px;
+    }
+
+    .render-search__column-first {
+      flex-basis: 40%;
+      flex-direction: column;
+    }
+
+    .render-search__column-second {
+      flex-basis: 100%;
+    }
+
+    .render-search__products {
+      width: 100%;
+    }
+
+    input[type='search'] {
+      width: 100%;
+      padding: 10px 15px;
+      outline: none;
+      box-shadow: none;
+    }
+  </style>
+{% endcomment %}
+
 {% if predictive_search.performed %}
   {% assign first_column_results_size = predictive_search.resources.queries.size
     | plus: predictive_search.resources.collections.size
