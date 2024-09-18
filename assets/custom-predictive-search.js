@@ -14,7 +14,7 @@
 
     <script src="{{ 'predictive-search.js' | asset_url }}" defer></script>
 
-    <prediction-search
+    <predictive-search
       content-id="data-search-content"
       timer="400"
       resources[type]="product,query,collection"
@@ -26,7 +26,7 @@
         value="{{ search.terms |  escape }}"
       >
       <div class="search-results" data-predictive-results></div>
-    </prediction-search> 
+    </predictive-search> 
   */
 }
 

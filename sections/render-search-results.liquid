@@ -145,6 +145,11 @@
         </div>
       {% endif %}
     </div>
+    {% if first_column_results_size < 1 and predictive_search.resources.products.size < 1 %}
+      <span
+        >No results found for <strong>"{{ predictive_search.terms }}"</strong></span
+      >
+    {% endif %}
   </div>
 {% endif %}
 
