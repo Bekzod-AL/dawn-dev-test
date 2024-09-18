@@ -27,7 +27,6 @@
             <div class="render-search__collections">
               <p class="render-search__title">Collections</p>
               {% for collection in predictive_search.resources.collections -%}
-                a
                 <div class="render-search__item">
                   <a href="{{ collection.url }}">{{ collection.title | escape }}</a>
                 </div>
@@ -40,6 +39,16 @@
               {% for page in predictive_search.resources.pages %}
                 <div class="render-search__item">
                   <a href="{{ page.url }}">{{ page.title | escape }}</a>
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+          {% if predictive_search.resources.articles.size > 0 %}
+            <div class="render-search__articles">
+              <p class="render-search__title">Articles</p>
+              {% for article in predictive_search.resources.articles %}
+                <div class="render-search__item">
+                  <a href="{{ article.url }}">{{ article.title | escape }}</a>
                 </div>
               {% endfor %}
             </div>

@@ -23,7 +23,7 @@
 {%- endstyle -%}
 
 <style>
-  div[data-predictive-results] {
+  .search-results {
     background-color: #f5f5f5;
     padding: 15px 20px;
   }
@@ -100,7 +100,7 @@
         type="search"
         value="{{ search.terms |  escape }}"
       >
-      <div data-predictive-results></div>
+      <div class="search-results" data-predictive-results></div>
     </pred-search>
   </div>
 
