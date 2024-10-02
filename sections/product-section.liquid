@@ -1,0 +1,395 @@
+<script src="{{ 'variant-change.js' |  asset_url }}" defer></script>
+
+<div class="product-section page-width">
+  <div class="container">
+    <div class="product-wrapper">
+      <div class="product-section__images">
+        {%- if product.selected_or_first_available_variant.featured_media != null -%}
+          {%- assign featured_media = product.selected_or_first_available_variant.featured_media -%}
+          <div class="product-section__featured-image">
+            <img src="{{ featured_media.preview_image |  img_url: 'master' }}" alt="{{ featured_media.alt }}">
+          </div>
+          <div class="product-section__carousel">
+            {% for media in product.media %}
+              {% if media.media_type == 'image' %}
+                {% if media.id == featured_media.id %}
+                  <div class="product-section__carousel-image active">
+                    <img src="{{ media.preview_image |  img_url: '100x100' }}" alt="{{ media.alt }}">
+                  </div>
+                {% else %}
+                  <div class="product-section__carousel-image">
+                    <img src="{{ media.preview_image |  img_url: '100x100' }}" alt="{{ media.alt }}">
+                  </div>
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+          </div>
+        {%- endif -%}
+      </div>
+
+      <div class="product-section__info">
+        {% form 'product', product %}
+          <input
+            id="product-form-input"
+            type="hidden"
+            value="{{ product.selected_or_first_available_variant.id }}"
+          >
+          <p class="product__title">
+            <span>{{ product.title }}</span>
+            <span class="product__vendor">({{ product.vendor }})</span>
+          </p>
+          <p class="product__price">{{ product.selected_or_first_available_variant.price | money }}</p>
+
+          <variant-change>
+            {% unless product.has_only_default_variant %}
+              <div data-section="{{ section.id }}" class="product-section__variants-wrapper">
+                {% for option in product.options_with_values %}
+                  <label for="Option-{{ section.id }}-{{ forloop.index0 }}">{{ option.name }}</label>
+
+                  <div id="{{ forloop.index0 }}" class="product-variants">
+                    {% for value in option.values %}
+                      <button
+                        {% if forloop.index0 == 0 %}
+                          active-variant
+                        {% endif %}
+                        data-variant-id="{{ value }}"
+                        class="product-variant {% if forloop.index0 == 0 %}active{% endif %}"
+                        type="button"
+                      >
+                        {{ value }}
+                      </button>
+                    {% endfor %}
+                  </div>
+                {% endfor %}
+              </div>
+            {% endunless %}
+
+            <script type="application/json">
+              {{ product.variants | json }}
+            </script>
+          </variant-change>
+
+          <button
+            type="submit"
+            class="product__submit-button"
+          >
+            Add to cart
+          </button>
+        {% endform %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Product page",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+  .product-section__featured-image img {
+    width: 100%;
+  }
+
+  .product-section__carousel {
+    display: flex;
+    justify-content: center;
+    height: 80px;
+    gap: 20px;
+  }
+
+  .product-section__carousel img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border: 1px solid #989898;
+    padding: 1px;
+  }
+
+  .product-section__carousel-image {
+    cursor: pointer;
+  }
+
+  .product-section__carousel-image.active img {
+    border-color: #ef3636;
+  }
+
+  .product-section {
+    padding: 40px 0;
+  }
+
+  .product-wrapper {
+    display: flex;
+  }
+
+  .product-section__images,
+  .product-section__info {
+    width: 50%;
+  }
+
+  .product-section__image {
+    cursor: pointer;
+    width: 270px;
+    height: 230px;
+    object-fit: cover;
+  }
+
+  .product-section__info {
+    padding: 0 20px;
+  }
+
+  .product__title {
+    font-size: 20px;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin: 5px 0;
+  }
+
+  .product__vendor {
+    color: #989898;
+    font-size: 14px;
+  }
+
+  .product__price {
+    color: #ef3636;
+    font-size: 20px;
+    margin: 0;
+  }
+
+  .product-section__variants-wrapper {
+    padding: 20px 0;
+  }
+
+  .product-variants {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 10px 0;
+  }
+
+  .product-variant {
+    cursor: pointer;
+    min-width: 48px;
+    text-align: center;
+    border: 1px solid #ef3636;
+    border-radius: 4px;
+    color: #ef3636;
+    padding: 10px 5px;
+    transition: 100ms all;
+    background-color: transparent;
+  }
+
+  button[active-variant] {
+    background-color: #ef3636;
+    color: #fff;
+  }
+
+  .product-variant:hover {
+    background-color: #ef3636;
+    color: #fff;
+  }
+
+  .product__submit-button,
+  .product__submit-button__ajax {
+    width: 100%;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 4px;
+    border: 1px solid #989898;
+    background-color: #989898;
+    padding: 10px 20px;
+    transition: 100ms all;
+    margin-top: 20px;
+  }
+
+  .product__submit-button[disabled] {
+    cursor: not-allowed;
+  }
+
+  .product__submit-button:hover,
+  .product__submit-button__ajax:hover {
+    color: #000;
+    background-color: transparent;
+  }
+
+  .product-section__description {
+    margin-top: 20px;
+  }
+
+  .product-section__description-button {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    background-color: transparent;
+    color: #ef3636;
+    border: 1px solid #ef3636;
+    font-weight: bold;
+    border-radius: 4px;
+    padding: 10px 20px;
+  }
+
+  .product-section__description-button span {
+    color: #000;
+  }
+
+  .product-section__description-content {
+    display: none;
+    margin: 10px 0;
+  }
+
+  .product-section__description.active .product-section__description-content {
+    display: block;
+  }
+
+  .product-section__description-button svg {
+    transition: 150ms all;
+  }
+
+  .product-section__description.active .product-section__description-button svg {
+    transform: rotate(180deg);
+  }
+
+  .product-section__swiper {
+    display: none;
+  }
+
+  .product-section__image-mobile {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+  }
+
+  .product-section__swiper {
+    width: 100%;
+    height: 100%;
+  }
+
+  .product-section__swiper {
+    margin-top: 40px;
+  }
+
+  .product-swiper-pagination {
+    display: flex;
+    justify-content: center;
+    margin: 30px 0;
+  }
+  /* recommendtations  */
+
+  .product-section__rec-wrapper {
+    margin: 70px 0 200px 0;
+  }
+
+  .product-section__rec {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    justify-content: center;
+    gap: 30px 10px;
+  }
+
+  .product-section__rec-title {
+    font-size: 30px;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+  /* image modal  */
+
+  .product-section__modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .product-section__modal.active {
+    display: block;
+  }
+
+  .image-modal {
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    border: 1px solid #000;
+    padding: 20px;
+  }
+
+  .image-modal__img {
+    width: 810px;
+    height: 690px;
+    object-fit: cover;
+    object-fit: cover;
+  }
+
+  .image-modal__close {
+    position: absolute;
+    right: 35px;
+    top: 35px;
+  }
+
+  .image-modal__close svg {
+    color: #ef3636;
+    cursor: pointer;
+  }
+
+  .release-date {
+    display: none;
+  }
+
+  @media (max-width: 1000px) {
+    .image-modal__img {
+      width: 500px;
+      height: 400px;
+    }
+  }
+
+  @media (max-width: 580px) {
+    .image-modal__img {
+      width: 300px;
+      height: 260px;
+      object-fit: contain;
+    }
+  }
+
+  @media (max-width: 625px) {
+    .product-section__images,
+    .product-section__info {
+      width: 100%;
+    }
+
+    .product-section__info {
+      padding: 0;
+    }
+
+    .product-wrapper {
+      flex-direction: column-reverse;
+    }
+
+    .product__submit-button,
+    .product__submit-button__ajax {
+      margin-bottom: 20px;
+    }
+
+    .product-section {
+      padding-top: 0;
+    }
+
+    .product-section__images {
+      display: none;
+    }
+
+    .product-section__swiper {
+      display: block;
+    }
+  }
+</style>
