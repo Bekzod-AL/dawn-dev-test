@@ -1,8 +1,10 @@
 class VariantChange extends HTMLElement {
+  // change structure into getting active from url ?variant , to set active variants and make it dyncamic
   constructor() {
     super();
     this.selectedOptions = null;
     this.currentVariant = null;
+    this.variantTrigger = 'button';
     this.variantValueAttribute = 'data-variant-value';
     this.variantActiveAttribute = 'data-active-variant';
     this.variantIdAttribute = 'data-variant-id';
@@ -14,7 +16,7 @@ class VariantChange extends HTMLElement {
   handleClick(event) {
     const target = event.target;
 
-    if (target.tagName.toLowerCase() === 'button' && target.hasAttribute(this.variantValueAttribute)) {
+    if (target.tagName.toLowerCase() === this.variantTrigger && target.hasAttribute(this.variantValueAttribute)) {
       this.changeVariant(target);
 
       this.selectedOptions = this.getSelectedOptions();
@@ -23,6 +25,7 @@ class VariantChange extends HTMLElement {
       this.changeProductFormInputData('product-form-input', this.currentVariant.id);
 
       console.log(this.currentVariant);
+      this.fetchProduct();
     }
   }
 
@@ -44,9 +47,17 @@ class VariantChange extends HTMLElement {
   }
 
   getSelectedOptions() {
-    return Array.from(this.querySelectorAll(`button[${this.variantActiveAttribute}]`)).map((option) =>
-      option.getAttribute(this.variantValueAttribute)
-    );
+    const input = this.querySelector(`input[id="product-form-input"]`);
+    const variants = JSON.parse(this.querySelector('[type="application/json"]').innerHTML);
+
+    const test = variants.find((item) => {
+      return item.id == input.value;
+    });
+
+    return test.options;
+    // return Array.from(this.querySelectorAll(`button[${this.variantActiveAttribute}]`)).map((option) =>
+    //   option.getAttribute(this.variantValueAttribute)
+    // );
   }
 
   getCurrentVariant() {
@@ -58,9 +69,11 @@ class VariantChange extends HTMLElement {
   }
 
   fetchProduct() {
-    fetch(window.Shopify.routes.root + 'products/t-shirt.js')
-      .then((response) => response.json())
-      .then((product) => console.log(product));
+    fetch(`t-shirt?variant=${this.currentVariant.id}?section_id=product-section`)
+      .then((response) => response.text())
+      .then((product) => {
+        document.querySelector('.product-section').innerHTML = product;
+      });
   }
 }
 

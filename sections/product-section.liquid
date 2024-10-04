@@ -52,9 +52,6 @@
 
                     {% for value in option.values %}
                       <button
-                        {% if forloop.index0 == 0 %}
-                          data-active-variant
-                        {% endif %}
                         data-variant-id="{{ group_index }}"
                         data-variant-value="{{ value }}"
                         class="product-variant {% if forloop.index0 == 0 %}active{% endif %}"
