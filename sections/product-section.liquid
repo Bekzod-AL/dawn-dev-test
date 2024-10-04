@@ -28,19 +28,20 @@
       </div>
 
       <div class="product-section__info">
-        {% form 'product', product %}
-          <input
-            id="product-form-input"
-            type="hidden"
-            value="{{ product.selected_or_first_available_variant.id }}"
-          >
-          <p class="product__title">
-            <span>{{ product.title }}</span>
-            <span class="product__vendor">({{ product.vendor }})</span>
-          </p>
-          <p class="product__price">{{ product.selected_or_first_available_variant.price | money }}</p>
+        <variant-change>
+          {% form 'product', product %}
+            <input
+              name="id"
+              id="product-form-input"
+              type="hidden"
+              value="{{ product.selected_or_first_available_variant.id }}"
+            >
+            <p class="product__title">
+              <span>{{ product.title }}</span>
+              <span class="product__vendor">({{ product.vendor }})</span>
+            </p>
+            <p class="product__price">{{ product.selected_or_first_available_variant.price | money }}</p>
 
-          <variant-change>
             {% unless product.has_only_default_variant %}
               <div data-section="{{ section.id }}" class="product-section__variants-wrapper">
                 {% for option in product.options_with_values %}
@@ -70,15 +71,17 @@
             <script type="application/json">
               {{ product.variants | json }}
             </script>
-          </variant-change>
 
-          <button
-            type="submit"
-            class="product__submit-button"
-          >
-            Add to cart
-          </button>
-        {% endform %}
+            <input hidden type="text" name="quantity" min="1" value="1">
+
+            <button
+              type="submit"
+              class="product__submit-button"
+            >
+              Add to cart
+            </button>
+          {% endform %}
+        </variant-change>
       </div>
     </div>
   </div>

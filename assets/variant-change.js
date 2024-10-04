@@ -20,7 +20,8 @@ class VariantChange extends HTMLElement {
       this.selectedOptions = this.getSelectedOptions();
       this.currentVariant = this.getCurrentVariant();
 
-      console.log(this.selectedOptions);
+      this.changeProductFormInputData('product-form-input', this.currentVariant.id);
+
       console.log(this.currentVariant);
     }
   }
@@ -34,6 +35,12 @@ class VariantChange extends HTMLElement {
     });
 
     target.setAttribute(this.variantActiveAttribute, '');
+  }
+
+  changeProductFormInputData(inputId, variantId) {
+    const input = this.querySelector(`input[id=${inputId}]`);
+
+    input.value = variantId;
   }
 
   getSelectedOptions() {
