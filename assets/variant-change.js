@@ -3,6 +3,8 @@ class VariantChange extends HTMLElement {
     super();
     this.selectedOptions = null;
     this.currentVariant = null;
+    // change to attr
+    // work with inputs
     this.variantTrigger = 'button';
     this.variantValueAttribute = 'data-variant-value';
     this.variantActiveAttribute = 'data-active-variant';
