@@ -3,9 +3,8 @@ class VariantChange extends HTMLElement {
     super();
     this.selectedOptions = null;
     this.currentVariant = null;
-    // change to attr
     // work with inputs
-    this.variantTrigger = 'button';
+    this.variantTrigger = 'data-variant-trigger';
     this.variantValueAttribute = 'data-variant-value';
     this.variantActiveAttribute = 'data-active-variant';
     this.variantIdAttribute = 'data-variant-id';
@@ -20,7 +19,7 @@ class VariantChange extends HTMLElement {
   handleClick(event) {
     const target = event.target;
 
-    if (target.tagName.toLowerCase() === this.variantTrigger && target.hasAttribute(this.variantValueAttribute)) {
+    if (target.hasAttribute(this.variantTrigger)) {
       this.changeVariant(target);
 
       this.selectedOptions = this.getSelectedOptions();
@@ -52,7 +51,7 @@ class VariantChange extends HTMLElement {
     const variantId = target.getAttribute(this.variantIdAttribute);
     const variantGroup = this.querySelector(`[${this.groupIdAttribute}="${variantId}"]`);
 
-    variantGroup.querySelectorAll(`${this.variantTrigger}[${this.variantActiveAttribute}]`).forEach((variant) => {
+    variantGroup.querySelectorAll(`[${this.variantTrigger}]`).forEach((variant) => {
       variant.removeAttribute(this.variantActiveAttribute);
     });
 
@@ -66,7 +65,7 @@ class VariantChange extends HTMLElement {
   }
 
   getSelectedOptions() {
-    return Array.from(this.querySelectorAll(`${this.variantTrigger}[${this.variantActiveAttribute}]`)).map((option) =>
+    return Array.from(this.querySelectorAll(`[${this.variantActiveAttribute}]`)).map((option) =>
       option.getAttribute(this.variantValueAttribute)
     );
   }
