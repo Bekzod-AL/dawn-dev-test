@@ -25,8 +25,8 @@
         <variant-change>
           {% form 'product', product %}
             <input
+              data-form-input
               name="id"
-              id="product-form-input"
               type="hidden"
               value="{{ product.selected_or_first_available_variant.id }}"
             >

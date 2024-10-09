@@ -4,12 +4,13 @@ class VariantChange extends HTMLElement {
     this.selectedOptions = null;
     this.currentVariant = null;
     // work with inputs
+    // make with selector
     this.variantTrigger = 'data-variant-trigger';
     this.variantValueAttribute = 'data-variant-value';
     this.variantActiveAttribute = 'data-active-variant';
     this.variantIdAttribute = 'data-variant-id';
     this.groupIdAttribute = 'data-group-id';
-    this.productFormInputId = 'product-form-input';
+    this.formInputAttribute = 'data-form-input';
     this.submitButtonAttribute = 'data-submit-button';
 
     this.setVariantFromUrl();
@@ -59,7 +60,7 @@ class VariantChange extends HTMLElement {
   }
 
   changeProductFormInputData(variantId) {
-    const input = this.querySelector(`input[id=${this.productFormInputId}]`);
+    const input = this.querySelector(`input[${this.formInputAttribute}]`);
 
     input.value = variantId;
   }
