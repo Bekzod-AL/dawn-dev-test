@@ -4,12 +4,15 @@
   <div class="container">
     <div class="product-wrapper">
       <div class="product-section__images">
-        {%- if product.selected_or_first_available_variant.featured_media != null -%}
-          {%- assign featured_media = product.selected_or_first_available_variant.featured_media -%}
-          <div class="product-section__featured-image">
+        {%- assign featured_media = product.selected_or_first_available_variant.featured_media -%}
+        <div class="product-section__featured-image">
+          {% if featured_media.preview_image != blank %}
             <img src="{{ featured_media.preview_image |  img_url: 'master' }}" alt="{{ featured_media.alt }}">
-          </div>
-        {%- endif -%}
+          {% else %}
+            {{ 'product-1' | placeholder_svg_tag }}
+          {% endif %}
+        </div>
+
         <div class="product-section__media">
           {% for media in product.media %}
             {% if media.media_type == 'image' %}
