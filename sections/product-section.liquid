@@ -9,16 +9,14 @@
           <div class="product-section__featured-image">
             <img src="{{ featured_media.preview_image |  img_url: 'master' }}" alt="{{ featured_media.alt }}">
           </div>
-          <div class="product-section__carousel">
-            {% for media in product.media %}
-              {% if media.media_type == 'image' %}
-                <div class="product-section__carousel-image {% if media.id == featured_media.id %} active {% endif %}">
-                  <img src="{{ media.preview_image |  img_url: '100x100' }}" alt="{{ media.alt }}">
-                </div>
-              {% endif %}
-            {% endfor %}
-          </div>
         {%- endif -%}
+        <div class="product-section__media">
+          {% for media in product.media %}
+            {% if media.media_type == 'image' %}
+              <img src="{{ media.preview_image |  img_url: 'large' }}" alt="{{ media.alt }}">
+            {% endif %}
+          {% endfor %}
+        </div>
       </div>
 
       <div class="product-section__info">
@@ -34,37 +32,12 @@
               <span>{{ product.title }}</span>
               <span class="product__vendor">({{ product.vendor }})</span>
             </p>
+
             <p class="product__price">{{ product.selected_or_first_available_variant.price | money }}</p>
 
             {% unless product.has_only_default_variant %}
               <div data-current-url="{{ product.url }}" class="product-section__variants-wrapper">
                 {% for option in product.options_with_values %}
-                  {% comment %}
-                    <label for="Option-{{ section.id }}-{{ forloop.index0 }}">{{ option.name }}</label>
-
-                    <div
-                      data-group-id="{{ forloop.index0 }}"
-                      class="product-variants"
-                    >
-                      {% assign group_index = forloop.index0 %}
-
-                      {% for value in option.values %}
-                        <button
-                          data-variant-trigger
-                          data-variant-id="{{ group_index }}"
-                          data-variant-value="{{ value }}"
-                          class="product-variant"
-                          type="button"
-                          {% if value == product.selected_or_first_available_variant.options[group_index] %}
-                            data-active-variant
-                          {% endif %}
-                        >
-                          {{ value }}
-                        </button>
-                      {% endfor %}
-                    </div>
-                  {% endcomment %}
-
                   <fieldset class="product-variants" data-group-id="{{ forloop.index0 }}">
                     <legend>{{ option.name }}</legend>
 
@@ -95,11 +68,11 @@
               </div>
             {% endunless %}
 
-            <script type="application/json">
-              {{ product.variants | json }}
-            </script>
+            <input type="text" name="quantity" min="1" value="1">
 
-            <input hidden type="text" name="quantity" min="1" value="1">
+            <div class="product-section__description">
+              <span>{{ product.description }}</span>
+            </div>
 
             <button
               data-submit-button
@@ -108,6 +81,10 @@
             >
               Add to cart
             </button>
+
+            <script type="application/json">
+              {{ product.variants | json }}
+            </script>
           {% endform %}
         </variant-change>
       </div>
@@ -129,55 +106,36 @@
 {% endschema %}
 
 <style>
-  .product-section__featured-image img {
-    width: 100%;
-  }
-
-  .product-section__carousel {
-    display: flex;
-    justify-content: center;
-    height: 80px;
-    gap: 20px;
-  }
-
-  .product-section__carousel img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border: 1px solid #989898;
-    padding: 1px;
-  }
-
-  .product-section__carousel-image {
-    cursor: pointer;
-  }
-
-  .product-section__carousel-image.active img {
-    border-color: #ef3636;
-  }
-
-  .product-section {
-    padding: 40px 0;
-  }
-
   .product-wrapper {
     display: flex;
+    gap: 0 20px;
   }
 
-  .product-section__images,
+  .product-section__images {
+    width: 60%;
+    margin-top: 20px;
+  }
+
   .product-section__info {
-    width: 50%;
+    width: 40%;
   }
 
-  .product-section__image {
-    cursor: pointer;
-    width: 270px;
-    height: 230px;
+  .product-wrapper img {
+    width: 100%;
+    aspect-ratio: 1/1;
+    height: auto;
     object-fit: cover;
+    object-position: center center;
   }
 
-  .product-section__info {
-    padding: 0 20px;
+  .product-section__media {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .product-section__media img {
+    width: 50%;
+    padding: 10px;
   }
 
   .product__title {
@@ -252,55 +210,6 @@
     background-color: transparent;
   }
 
-  .product-section__description {
-    margin-top: 20px;
-  }
-
-  .product-section__description-button {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    background-color: transparent;
-    color: #ef3636;
-    border: 1px solid #ef3636;
-    font-weight: bold;
-    border-radius: 4px;
-    padding: 10px 20px;
-  }
-
-  .product-section__description-button span {
-    color: #000;
-  }
-
-  .product-section__description-content {
-    display: none;
-    margin: 10px 0;
-  }
-
-  .product-section__description.active .product-section__description-content {
-    display: block;
-  }
-
-  .product-section__description-button svg {
-    transition: 150ms all;
-  }
-
-  .product-section__description.active .product-section__description-button svg {
-    transform: rotate(180deg);
-  }
-
-  .product-section__swiper {
-    display: none;
-  }
-
-  .product-section__image-mobile {
-    width: 100%;
-    height: 400px;
-    object-fit: cover;
-  }
-
   /* HTML: <div class="loader"></div> */
   .loader {
     width: 20px;
@@ -345,53 +254,6 @@
     }
     100% {
       transform: scaleY(-1) rotate(-135deg);
-    }
-  }
-
-  @media (max-width: 1000px) {
-    .image-modal__img {
-      width: 500px;
-      height: 400px;
-    }
-  }
-
-  @media (max-width: 580px) {
-    .image-modal__img {
-      width: 300px;
-      height: 260px;
-      object-fit: contain;
-    }
-  }
-
-  @media (max-width: 625px) {
-    .product-section__images,
-    .product-section__info {
-      width: 100%;
-    }
-
-    .product-section__info {
-      padding: 0;
-    }
-
-    .product-wrapper {
-      flex-direction: column-reverse;
-    }
-
-    .product__submit-button,
-    .product__submit-button__ajax {
-      margin-bottom: 20px;
-    }
-
-    .product-section {
-      padding-top: 0;
-    }
-
-    .product-section__images {
-      display: none;
-    }
-
-    .product-section__swiper {
-      display: block;
     }
   }
 </style>
