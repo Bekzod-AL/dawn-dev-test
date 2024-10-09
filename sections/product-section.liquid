@@ -39,29 +39,58 @@
             {% unless product.has_only_default_variant %}
               <div data-current-url="{{ product.url }}" class="product-section__variants-wrapper">
                 {% for option in product.options_with_values %}
-                  <label for="Option-{{ section.id }}-{{ forloop.index0 }}">{{ option.name }}</label>
+                  {% comment %}
+                    <label for="Option-{{ section.id }}-{{ forloop.index0 }}">{{ option.name }}</label>
 
-                  <div
-                    data-group-id="{{ forloop.index0 }}"
-                    class="product-variants"
-                  >
+                    <div
+                      data-group-id="{{ forloop.index0 }}"
+                      class="product-variants"
+                    >
+                      {% assign group_index = forloop.index0 %}
+
+                      {% for value in option.values %}
+                        <button
+                          data-variant-trigger
+                          data-variant-id="{{ group_index }}"
+                          data-variant-value="{{ value }}"
+                          class="product-variant"
+                          type="button"
+                          {% if value == product.selected_or_first_available_variant.options[group_index] %}
+                            data-active-variant
+                          {% endif %}
+                        >
+                          {{ value }}
+                        </button>
+                      {% endfor %}
+                    </div>
+                  {% endcomment %}
+
+                  <fieldset class="product-variants" data-group-id="{{ forloop.index0 }}">
+                    <legend>{{ option.name }}</legend>
+
                     {% assign group_index = forloop.index0 %}
 
                     {% for value in option.values %}
-                      <button
+                      <input
+                        type="radio"
+                        id="{{ section.id }}-{{ value }}"
+                        name="{{ option.name }}-{{ group_index }}"
+                        hidden
+                      >
+                      <label
+                        class="product-variant"
+                        for="{{ section.id }}-{{ value }}"
                         data-variant-trigger
                         data-variant-id="{{ group_index }}"
                         data-variant-value="{{ value }}"
-                        class="product-variant"
-                        type="button"
                         {% if value == product.selected_or_first_available_variant.options[group_index] %}
                           data-active-variant
                         {% endif %}
                       >
-                        {{ value }}
-                      </button>
+                        {{- value -}}
+                      </label>
                     {% endfor %}
-                  </div>
+                  </fieldset>
                 {% endfor %}
               </div>
             {% endunless %}
@@ -174,6 +203,7 @@
   }
 
   .product-variants {
+    border: none;
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
@@ -181,18 +211,19 @@
   }
 
   .product-variant {
+    display: inline-block;
     cursor: pointer;
     min-width: 48px;
     text-align: center;
     border: 1px solid #ef3636;
     border-radius: 4px;
     color: #ef3636;
-    padding: 10px 5px;
+    padding: 4px 10px;
     transition: 100ms all;
     background-color: transparent;
   }
 
-  button[data-active-variant] {
+  [data-active-variant] {
     background-color: #ef3636;
     color: #fff;
   }
