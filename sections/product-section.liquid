@@ -1,6 +1,63 @@
-<script src="{{ 'variant-change.js' |  asset_url }}" defer></script>
+{% comment %}
+  To use this section you need to have: <script src="{{ 'variant-changer.js' |  asset_url }}" defer></script>
 
-<div class="product-section page-width">
+    Attributes Reference:
+    - data-product-section: to the root div of this sectio.
+    - data-form-input: attribute for the hidden form input holding the selected variant ID.
+    - data-current-url: stores the current product URL for variant-based URL updates.
+    - data-variant-trigger: attribute for variant change triggers (radio buttons/labels).
+    - data-variant-id: Identifies the group ID for each variant option.
+    - data-variant-value: holds the value of the variant (e.g., size or color).
+    - data-active-variant: applied to the active/selected variant option.
+    - data-submit-button: attribute for the Add to Cart button.
+    -
+
+    Example - Radio Button Implementation:
+    <fieldset data-group-id="{{ forloop.index0 }}">
+      {% assign group_index = forloop.index0 %}
+
+      {% for value in option.values %}
+        <input
+          type="radio"
+          id="{{ section.id }}-{{ value }}"
+          name="{{ option.name }}-{{ group_index }}"
+          hidden
+        >
+        <label
+          for="{{ section.id }}-{{ value }}"
+          data-variant-trigger
+          data-variant-id="{{ group_index }}"
+          data-variant-value="{{ value }}"
+          {% if value == product.selected_or_first_available_variant.options[group_index] %}
+            data-active-variant
+          {% endif %}
+        >
+          {{- value -}}
+        </label>
+      {% endfor %}
+    </fieldset>
+
+    Example - Select Tag Implementation:
+    <select
+      name="options[{{ option.name |  escape }}]"
+      id="option-{{ section.id }}-{{ forloop.index0 }}"
+    >
+      {% for value in option.values %}
+        <option
+          value="{{ value |  escape }}"
+          {% if option.selected_value == value %}
+            selected="selected"
+          {% endif %}
+        >
+          {{ value }}
+        </option>
+      {% endfor %}
+    </select>
+{% endcomment %}
+
+<script src="{{ 'variant-changer.js' |  asset_url }}" defer></script>
+
+<div data-product-section class="product-section page-width">
   <div class="container">
     <div class="product-wrapper">
       <div class="product-section__images">
@@ -23,7 +80,7 @@
       </div>
 
       <div class="product-section__info">
-        <variant-change>
+        <variant-changer>
           {% form 'product', product %}
             <input
               data-form-input
@@ -41,27 +98,27 @@
             {% unless product.has_only_default_variant %}
               <div data-current-url="{{ product.url }}" class="product-section__variants-wrapper">
                 {% for option in product.options_with_values %}
-                  <div>
-                    <label for="option-{{ section.id }}-{{ forloop.index0 }}">{{ option.name }}</label>
+                  {% if section.settings.variant_type == 'select' %}
+                    <div>
+                      <label for="option-{{ section.id }}-{{ forloop.index0 }}">{{ option.name }}</label>
 
-                    <select
-                      name="options[{{ option.name |  escape }}]"
-                      id="option-{{ section.id }}-{{ forloop.index0 }}"
-                    >
-                      {% for value in option.values %}
-                        <option
-                          value="{{ value |  escape }}"
-                          {% if option.selected_value == value %}
-                            selected="selected"
-                          {% endif %}
-                        >
-                          {{ value }}
-                        </option>
-                      {% endfor %}
-                    </select>
-                  </div>
-
-                  {% comment %}
+                      <select
+                        name="options[{{ option.name |  escape }}]"
+                        id="option-{{ section.id }}-{{ forloop.index0 }}"
+                      >
+                        {% for value in option.values %}
+                          <option
+                            value="{{ value |  escape }}"
+                            {% if option.selected_value == value %}
+                              selected="selected"
+                            {% endif %}
+                          >
+                            {{ value }}
+                          </option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                  {% elsif section.settings.variant_type == 'input' %}
                     <fieldset class="product-variants" data-group-id="{{ forloop.index0 }}">
                       <legend>{{ option.name }}</legend>
 
@@ -88,7 +145,7 @@
                         </label>
                       {% endfor %}
                     </fieldset>
-                  {% endcomment %}
+                  {% endif %}
                 {% endfor %}
               </div>
             {% endunless %}
@@ -102,7 +159,6 @@
             <button
               data-submit-button
               type="submit"
-              class="product__submit-button"
             >
               Add to cart
             </button>
@@ -111,7 +167,7 @@
               {{ product.variants | json }}
             </script>
           {% endform %}
-        </variant-change>
+        </variant-changer>
       </div>
     </div>
   </div>
@@ -125,191 +181,149 @@
       "type": "text",
       "id": "title",
       "label": "Title"
+    },
+    {
+      "type": "select",
+      "id": "variant_type",
+      "label": "Variant type",
+      "options": [
+        {
+          "value": "select",
+          "label": "Select"
+        },
+        {
+          "value": "input",
+          "label": "Input"
+        }
+      ],
+      "default": "select"
     }
   ]
 }
 {% endschema %}
 
 <style>
-    .product-wrapper {
-      display: flex;
-      gap: 0 20px;
-    }
+  .product-wrapper {
+    display: flex;
+    gap: 0 20px;
+  }
 
-    .product-section__images {
-      width: 60%;
-      margin-top: 20px;
-    }
+  .product-section__images {
+    width: 60%;
+    margin-top: 20px;
+  }
 
-    .product-section__info {
-      width: 40%;
-    }
+  .product-section__info {
+    width: 40%;
+  }
 
-    .product-wrapper img {
-      width: 100%;
-      aspect-ratio: 1/1;
-      height: auto;
-      object-fit: cover;
-      object-position: center center;
-    }
+  .product-wrapper img {
+    width: 100%;
+    aspect-ratio: 1/1;
+    height: auto;
+    object-fit: cover;
+    object-position: center center;
+  }
 
-    .product-section__media {
-      display: flex;
-      flex-wrap: wrap;
-    }
+  .product-section__media {
+    display: flex;
+    flex-wrap: wrap;
+  }
 
-    .product-section__media img {
-      width: 50%;
-      padding: 10px;
-    }
+  .product-section__media img {
+    width: 50%;
+    padding: 10px;
+  }
 
-    .product__title {
-      font-size: 20px;
-      font-weight: bold;
-      text-transform: uppercase;
-      margin: 5px 0;
-    }
+  .product__title {
+    font-size: 20px;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin: 5px 0;
+  }
 
-    .product__vendor {
-      color: #989898;
-      font-size: 14px;
-    }
+  .product__vendor {
+    color: #989898;
+    font-size: 14px;
+  }
 
-    .product__price {
-      color: #ef3636;
-      font-size: 20px;
-      margin: 0;
-    }
+  .product__price {
+    color: #ef3636;
+    font-size: 20px;
+    margin: 0;
+  }
 
-    .product-section__variants-wrapper {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      padding: 20px 0;
-    }
+  .product-section__variants-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px 0;
+  }
 
-    select {
-      width: 100%;
-      padding: 8px 4px;
-      border: 1px solid #989898;
-      border-radius: 2px;
-    }
+  select {
+    width: 100%;
+    padding: 8px 4px;
+    border: 1px solid #989898;
+    border-radius: 2px;
+  }
 
-    select:focus {
-      outline: none;
-      box-shadow: none;
-    }
+  select:focus {
+    outline: none;
+    box-shadow: none;
+  }
 
-    .product-variants {
-      border: none;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      padding: 0;
-    }
+  .product-variants {
+    border: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 0;
+  }
 
-    .product-variant {
-      display: inline-block;
-      cursor: pointer;
-      min-width: 48px;
-      text-align: center;
-      border: 1px solid #ef3636;
-      border-radius: 4px;
-      color: #ef3636;
-      padding: 4px 10px;
-      transition: 100ms all;
-      background-color: transparent;
-    }
+  .product-variant {
+    display: inline-block;
+    cursor: pointer;
+    min-width: 48px;
+    text-align: center;
+    border: 1px solid #ef3636;
+    border-radius: 4px;
+    color: #ef3636;
+    padding: 4px 10px;
+    transition: 100ms all;
+    background-color: transparent;
+  }
 
-    [data-active-variant] {
-      background-color: #ef3636;
-      color: #fff;
-    }
+  [data-active-variant] {
+    background-color: #ef3636;
+    color: #fff;
+  }
 
-    .product-variant:hover {
-      background-color: #ef3636;
-      color: #fff;
-    }
+  .product-variant:hover {
+    background-color: #ef3636;
+    color: #fff;
+  }
 
-  <<<<<<< HEAD
-    [data-submit-button] {
-  =======
-    .product__submit-button {
-  >>>>>>> 4cbbd05bf08b874675afb8173720524a5e8522a1
-      height: 40px;
-      cursor: pointer;
-      width: 100%;
-      color: #fff;
-      font-weight: bold;
-      border-radius: 4px;
-      border: 1px solid #989898;
-      background-color: #000000;
-      padding: 10px 20px;
-      transition: 100ms all;
-      margin-top: 20px;
-    }
+  [data-submit-button] {
+    height: 40px;
+    cursor: pointer;
+    width: 100%;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 4px;
+    border: 1px solid #989898;
+    background-color: #000000;
+    padding: 10px 20px;
+    transition: 100ms all;
+    margin-top: 20px;
+  }
 
-  <<<<<<< HEAD
-    [data-submit-button][disabled] {
-      background-color: #989898;
-      cursor: not-allowed;
-    }
+  [data-submit-button][disabled] {
+    background-color: #989898;
+    cursor: not-allowed;
+  }
 
-    [data-submit-button]:hover {
-      color: #000;
-      background-color: transparent;
-    }
-  =======
-    .product__submit-button:hover {
-      color: #000;
-      background-color: transparent;
-    }
-
-    /* HTML: <div class="loader"></div> */
-    .loader {
-      width: 20px;
-      height: 20px;
-      margin: 0 auto;
-      border-radius: 50%;
-      border: 5px solid #ffffff;
-      animation: l20-1 0.8s infinite linear alternate, l20-2 1.6s infinite linear;
-    }
-    @keyframes l20-1 {
-      0% {
-        clip-path: polygon(50% 50%, 0 0, 50% 0%, 50% 0%, 50% 0%, 50% 0%, 50% 0%);
-      }
-      12.5% {
-        clip-path: polygon(50% 50%, 0 0, 50% 0%, 100% 0%, 100% 0%, 100% 0%, 100% 0%);
-      }
-      25% {
-        clip-path: polygon(50% 50%, 0 0, 50% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 100%);
-      }
-      50% {
-        clip-path: polygon(50% 50%, 0 0, 50% 0%, 100% 0%, 100% 100%, 50% 100%, 0% 100%);
-      }
-      62.5% {
-        clip-path: polygon(50% 50%, 100% 0, 100% 0%, 100% 0%, 100% 100%, 50% 100%, 0% 100%);
-      }
-      75% {
-        clip-path: polygon(50% 50%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 50% 100%, 0% 100%);
-      }
-      100% {
-        clip-path: polygon(50% 50%, 50% 100%, 50% 100%, 50% 100%, 50% 100%, 50% 100%, 0% 100%);
-      }
-    }
-    @keyframes l20-2 {
-      0% {
-        transform: scaleY(1) rotate(0deg);
-      }
-      49.99% {
-        transform: scaleY(1) rotate(135deg);
-      }
-      50% {
-        transform: scaleY(-1) rotate(0deg);
-      }
-      100% {
-        transform: scaleY(-1) rotate(-135deg);
-      }
-    }
-  >>>>>>> 4cbbd05bf08b874675afb8173720524a5e8522a1
+  [data-submit-button]:hover {
+    color: #000;
+    background-color: transparent;
+  }
 </style>

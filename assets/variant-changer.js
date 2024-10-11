@@ -1,8 +1,9 @@
-class VariantChange extends HTMLElement {
+class VariantChanger extends HTMLElement {
   constructor() {
     super();
     this.selectedOptions = null;
     this.currentVariant = null;
+    this.productSectionAttribute = 'data-product-section';
     this.variantTrigger = 'data-variant-trigger';
     this.variantValueAttribute = 'data-variant-value';
     this.variantActiveAttribute = 'data-active-variant';
@@ -108,7 +109,9 @@ class VariantChange extends HTMLElement {
       const responseData = await res.text();
       const resultsMarkup = new DOMParser().parseFromString(responseData, 'text/html');
 
-      document.querySelector('.product-section').innerHTML = resultsMarkup.querySelector('.product-section').innerHTML;
+      document.querySelector(`[${this.productSectionAttribute}]`).innerHTML = resultsMarkup.querySelector(
+        `[${this.productSectionAttribute}]`
+      ).innerHTML;
     } catch (error) {
       console.error('Error: ', error);
     } finally {
@@ -117,4 +120,4 @@ class VariantChange extends HTMLElement {
   }
 }
 
-customElements.define('variant-change', VariantChange);
+customElements.define('variant-changer', VariantChanger);
