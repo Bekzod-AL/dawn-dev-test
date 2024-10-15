@@ -114,8 +114,6 @@ class VariantChanger extends HTMLElement {
       ).innerHTML;
     } catch (error) {
       console.error('Error: ', error);
-    } finally {
-      submitButton.disabled = false;
     }
   }
 }
