@@ -2,15 +2,14 @@
   To use this section you need to have: <script src="{{ 'variant-changer.js' |  asset_url }}" defer></script>
 
     Attributes Reference:
-    - data-product-section: to the root div of this sectio.
+    - data-product-section: place in the parent element of this section.
     - data-form-input: attribute for the hidden form input holding the selected variant ID.
     - data-current-url: stores the current product URL for variant-based URL updates.
     - data-variant-trigger: attribute for variant change triggers (radio buttons/labels).
-    - data-variant-id: Identifies the group ID for each variant option.
+    - data-variant-id: identifies the group ID for each variant option.
     - data-variant-value: holds the value of the variant (e.g., size or color).
     - data-active-variant: applied to the active/selected variant option.
     - data-submit-button: attribute for the Add to Cart button.
-    -
 
     Example - Radio Button Implementation:
     <fieldset data-group-id="{{ forloop.index0 }}">
@@ -178,11 +177,6 @@
   "name": "Product page",
   "settings": [
     {
-      "type": "text",
-      "id": "title",
-      "label": "Title"
-    },
-    {
       "type": "select",
       "id": "variant_type",
       "label": "Variant type",
@@ -215,6 +209,9 @@
 
   .product-section__info {
     width: 40%;
+    position: sticky;
+    top: 20px;
+    height: 100%;
   }
 
   .product-wrapper img {
@@ -293,12 +290,12 @@
     background-color: transparent;
   }
 
-  [data-active-variant] {
+  .product-variant:hover {
     background-color: #ef3636;
     color: #fff;
   }
 
-  .product-variant:hover {
+  [data-active-variant] {
     background-color: #ef3636;
     color: #fff;
   }
@@ -325,5 +322,38 @@
   [data-submit-button]:hover {
     color: #000;
     background-color: transparent;
+  }
+
+  @media (max-width: 990px) {
+    .product-section__images {
+      width: 40%;
+    }
+
+    .product-section__info {
+      width: 60%;
+    }
+
+    .product-section__media {
+      flex-direction: column;
+    }
+
+    .product-section__media img {
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 740px) {
+    .product-wrapper {
+      flex-direction: column;
+    }
+
+    .product-section__images,
+    .product-section__info {
+      width: 100%;
+    }
+
+    .product-section__media {
+      display: none;
+    }
   }
 </style>
